@@ -1,0 +1,43 @@
+export type Lang = "es" | "en";
+export const translations = {
+  es: {
+    menu: ["Quién soy", "Proyectos", "Tecnologías", "Contacto", "Saber más"],
+    aboutTitle: "Quién soy",
+    name: "Isaac José García Márquez",
+    bio: "Apasionado por la tecnología, desarrollo web y nuevas herramientas digitales. Experiencia en proyectos de software, aprendizaje continuo en tecnologías modernas y motivación por crear soluciones innovadoras.",
+    contact: "Contacto",
+    downloadCV: "Descargar CV",
+    copyEmail: "Copiar email",
+    sendEmail: "Enviar email",
+    linkedin: "LinkedIn",
+    learnMore: "Saber más",
+    projectsTitle: "Proyectos",
+    techTitle: "Tecnologías",
+    mastered: "Manejo",
+    learning: "Aprendiendo",
+    openProject: "Abrir proyecto",
+    viewMore: "Ver más",
+    footerGithub: "GitHub",
+    footerLinkedin: "LinkedIn"
+  },
+  en: {
+    menu: ["About Me", "Projects", "Technologies", "Contact", "Learn More"],
+    aboutTitle: "About Me",
+    name: "Isaac José García Márquez",
+    bio: "Passionate about technology, web development and new digital tools. Experience in software projects, continuous learning in modern technologies and motivated to build innovative solutions.",
+    contact: "Contact",
+    downloadCV: "Download CV",
+    copyEmail: "Copy email",
+    sendEmail: "Send email",
+    linkedin: "LinkedIn",
+    learnMore: "Learn More",
+    projectsTitle: "Projects",
+    techTitle: "Technologies",
+    mastered: "Mastered",
+    learning: "Learning",
+    openProject: "Open project",
+    viewMore: "View more",
+    footerGithub: "GitHub",
+    footerLinkedin: "LinkedIn"
+  }
+};
