@@ -9,14 +9,14 @@
   --bg-100: #03102a;
   --bg-200: #071738;
   --panel: rgba(12,24,50,0.55);
-  --glass: rgba(255,255,255,0.06);
-  --muted: rgba(230,238,246,0.7);
-  --text-main: #e6eef6;
+  --glass: rgba(255,255,255,0.04);
+  --muted: rgba(230,238,246,0.8);
+  --text-main: #f1f5f9;
   --accent-blue: #0ea5ff;
   --accent-2: #7c3aed; /* violeta suave */
   --accent-warm: #ff8a3d; /* naranja de acento */
-  --card-border: rgba(255,255,255,0.06);
-  --glass-blur: 10px;
+  --card-border: rgba(255,255,255,0.08);
+  --glass-blur: 8px;
   --radius-lg: 14px;
   --radius-md: 10px;
   --elev-1: 0 6px 20px rgba(3,6,24,0.45);
@@ -65,6 +65,16 @@ p, span, a, li {
   font-weight: 400;
   line-height: 1.6;
 }
+
+/* Mejorar contraste para textos principales */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+}
+
+/* Textos secundarios más legibles */
+.text-gray-200 { color: rgba(243, 244, 246, 0.9) !important; }
+.text-gray-300 { color: rgba(209, 213, 219, 0.9) !important; }
+.text-gray-400 { color: rgba(156, 163, 175, 0.9) !important; }
 
 /* encabezado principal con efecto sutil */
 .header-title {

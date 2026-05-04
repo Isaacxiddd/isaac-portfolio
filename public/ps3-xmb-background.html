@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PS3 XMB Background Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    overflow: hidden;
+    font-family: 'SCE-PS3 Rodin', 'Sony Sketch EF', sans-serif;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* ── Canvas layers ── */
+  #bgGradient {
+    position: fixed;
+    inset: 0;
+    /* PS3 gradient: deep navy → vivid blue → lighter blue */
+    background: radial-gradient(ellipse 120% 80% at 50% 60%,
+      #0066cc 0%,
+      #0044aa 25%,
+      #001f5c 60%,
+      #000a1f 100%);
+    z-index: 0;
+  }
+
+  #waveCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  #particleCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ── XMB UI layer ── */
+  #xmb {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Clock */
+  #clock {
+    position: fixed;
+    top: 18px;
+    right: 24px;
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(120,200,255,0.9);
+    border: 1px solid rgba(120,200,255,0.3);
+    padding: 3px 10px;
+    border-radius: 2px;
+    background: rgba(0,0,0,0.2);
+  }
+
+  /* ── Horizontal icon bar ── */
+  #iconBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 52px;
+    padding: 0 60px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .xmb-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0.35;
+    transform: scale(0.8) translateY(0);
+  }
+
+  .xmb-icon.active {
+    opacity: 1;
+    transform: scale(1.15) translateY(-4px);
+  }
+
+  .xmb-icon.near {
+    opacity: 0.6;
+    transform: scale(0.88) translateY(0);
+  }
+
+  .xmb-icon svg {
+    width: 42px;
+    height: 42px;
+    filter: drop-shadow(0 0 0px rgba(150,220,255,0));
+    transition: filter 0.3s ease;
+  }
+
+  .xmb-icon.active svg {
+    filter:
+      drop-shadow(0 0 8px rgba(150,220,255,1))
+      drop-shadow(0 0 20px rgba(100,180,255,0.7))
+      drop-shadow(0 0 40px rgba(80,160,255,0.4));
+  }
+
+  .xmb-icon .icon-label {
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0);
+    text-shadow: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .xmb-icon.active .icon-label {
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 0 12px rgba(150,220,255,0.8);
+  }
+
+  /* ── Vertical options list ── */
+  #optionList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-left: calc(50% - 300px);
+    margin-top: 30px;
+  }
+
+  .xmb-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0.45;
+    transform: translateX(0);
+  }
+
+  .xmb-option.active {
+    opacity: 1;
+    transform: translateX(8px);
+  }
+
+  .xmb-option .opt-icon {
+    width: 22px;
+    height: 22px;
+    opacity: 0.7;
+    transition: all 0.25s ease;
+  }
+
+  .xmb-option.active .opt-icon {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(150,220,255,0.9));
+  }
+
+  .xmb-option .opt-text {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(180,220,255,0.7);
+    letter-spacing: 0.3px;
+    transition: all 0.25s ease;
+  }
+
+  .xmb-option.active .opt-text {
+    color: #ffffff;
+    font-size: 18px;
+    text-shadow:
+      0 0 12px rgba(150,220,255,0.9),
+      0 0 30px rgba(100,180,255,0.5);
+  }
+
+  .xmb-option .opt-desc {
+    font-size: 11px;
+    color: rgba(150,200,255,0.4);
+    display: none;
+  }
+
+  .xmb-option.active .opt-desc {
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* Divider line below active icon */
+  #activeBar {
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 0;
+    background: linear-gradient(to bottom, rgba(150,220,255,0.9), transparent);
+    transition: none;
+  }
+
+  /* Horizontal glow line across icon bar */
+  #glowLine {
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(100,180,255,0.1) 20%,
+      rgba(150,220,255,0.4) 50%,
+      rgba(100,180,255,0.1) 80%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  /* Navigation hint */
+  #navHint {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(150,200,255,0.4);
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background layers -->
+<div id="bgGradient"></div>
+<canvas id="waveCanvas"></canvas>
+<canvas id="particleCanvas"></canvas>
+
+<!-- XMB Interface -->
+<div id="xmb">
+  <div id="clock">1/3 &nbsp; 2:13 AM</div>
+
+  <div id="iconBar">
+    <div id="glowLine"></div>
+
+    <!-- Icons: Home, Settings, Photo, Music, Video, TV, Game, Network -->
+    <div class="xmb-icon" data-idx="0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(150,220,255,0.9)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Person/User -->
+        <circle cx="12" cy="7" r="4"/>
+        <path d="M4 21v-1a8 8 0 0 1 16 0v1"/>
+      </svg>
+      <span class="icon-label">Quién soy</span>
+    </div>
+
+    <div class="xmb-icon" data-idx="1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(150,220,255,0.9)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Briefcase/Work -->
+        <rect x="2" y="8" width="20" height="13" rx="2"/>
+        <path d="M16 8V6a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        <line x1="12" y1="13" x2="12" y2="13"/>
+        <line x1="2" y1="13" x2="22" y2="13"/>
+      </svg>
+      <span class="icon-label">Proyectos</span>
+    </div>
+
+    <div class="xmb-icon active" data-idx="2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(150,220,255,0.9)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Code/Settings -->
+        <polyline points="16 18 22 12 16 6"/>
+        <polyline points="8 6 2 12 8 18"/>
+      </svg>
+      <span class="icon-label">Tecnologías</span>
+    </div>
+
+    <div class="xmb-icon" data-idx="3">
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(150,220,255,0.9)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Phone/Contact -->
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.55 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.84a16 16 0 0 0 5.93 5.93l1.14-1.14a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2z"/>
+      </svg>
+      <span class="icon-label">Contacto</span>
+    </div>
+
+    <div class="xmb-icon" data-idx="4">
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(150,220,255,0.9)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Info/More -->
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="8"/>
+        <line x1="12" y1="12" x2="12" y2="16"/>
+      </svg>
+      <span class="icon-label">Saber más</span>
+    </div>
+  </div>
+
+  <!-- Vertical options for active category -->
+  <div id="optionList">
+    <div class="xmb-option active">
+      <svg class="opt-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(150,220,255,0.9)" stroke-width="1.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      <div>
+        <div class="opt-text">Frontend</div>
+        <div class="opt-desc">HTML · CSS · JavaScript · React</div>
+      </div>
+    </div>
+    <div class="xmb-option">
+      <svg class="opt-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(150,220,255,0.9)" stroke-width="1.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      <div>
+        <div class="opt-text">Backend</div>
+        <div class="opt-desc">Node.js · Python · SQL</div>
+      </div>
+    </div>
+    <div class="xmb-option">
+      <svg class="opt-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(150,220,255,0.9)" stroke-width="1.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <div>
+        <div class="opt-text">Herramientas</div>
+        <div class="opt-desc">Git · Docker · Linux</div>
+      </div>
+    </div>
+    <div class="xmb-option">
+      <svg class="opt-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(150,220,255,0.9)" stroke-width="1.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div>
+        <div class="opt-text">Idiomas</div>
+        <div class="opt-desc">Español · Inglés</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="navHint">← → para navegar categorías &nbsp;|&nbsp; ↑ ↓ para opciones</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  WAVE CANVAS
+// ═══════════════════════════════════════════════════════
+(function() {
+  const canvas = document.getElementById('waveCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Wave configs — multiple layers at different speeds/opacities
+  const waves = [
+    { amp: 80,  freq: 0.003, speed: 0.00015, phase: 0,    yBase: 0.55, alpha: 0.06, blur: 18 },
+    { amp: 60,  freq: 0.004, speed: 0.00022, phase: 2.1,  yBase: 0.60, alpha: 0.08, blur: 12 },
+    { amp: 100, freq: 0.0025,speed: 0.00010, phase: 4.3,  yBase: 0.50, alpha: 0.04, blur: 24 },
+    { amp: 50,  freq: 0.005, speed: 0.00030, phase: 1.0,  yBase: 0.65, alpha: 0.10, blur: 8  },
+    { amp: 70,  freq: 0.0035,speed: 0.00018, phase: 3.5,  yBase: 0.45, alpha: 0.05, blur: 20 },
+  ];
+
+  let t = 0;
+
+  function drawWave(wave) {
+    ctx.save();
+    ctx.shadowColor = 'rgba(100, 180, 255, 0.6)';
+    ctx.shadowBlur  = wave.blur;
+
+    const grad = ctx.createLinearGradient(0, 0, W, 0);
+    grad.addColorStop(0,   'rgba(80, 160, 255, 0)');
+    grad.addColorStop(0.2, `rgba(100, 190, 255, ${wave.alpha})`);
+    grad.addColorStop(0.5, `rgba(140, 210, 255, ${wave.alpha * 1.8})`);
+    grad.addColorStop(0.8, `rgba(100, 190, 255, ${wave.alpha})`);
+    grad.addColorStop(1,   'rgba(80, 160, 255, 0)');
+
+    ctx.beginPath();
+    ctx.moveTo(-10, H);
+
+    for (let x = -10; x <= W + 10; x += 3) {
+      const y = H * wave.yBase
+        + Math.sin(x * wave.freq + t * wave.speed * 1000 + wave.phase) * wave.amp
+        + Math.sin(x * wave.freq * 1.7 + t * wave.speed * 700 + wave.phase * 1.3) * wave.amp * 0.3;
+      ctx.lineTo(x, y);
+    }
+
+    ctx.lineTo(W + 10, H);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Draw the edge glow line on top
+    ctx.beginPath();
+    ctx.moveTo(-10, H);
+    for (let x = -10; x <= W + 10; x += 3) {
+      const y = H * wave.yBase
+        + Math.sin(x * wave.freq + t * wave.speed * 1000 + wave.phase) * wave.amp
+        + Math.sin(x * wave.freq * 1.7 + t * wave.speed * 700 + wave.phase * 1.3) * wave.amp * 0.3;
+      ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = `rgba(160, 220, 255, ${wave.alpha * 1.5})`;
+    ctx.lineWidth = 1.5;
+    ctx.shadowColor = 'rgba(150, 210, 255, 0.8)';
+    ctx.shadowBlur  = wave.blur * 1.5;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function animate(ts) {
+    t = ts;
+    ctx.clearRect(0, 0, W, H);
+    waves.forEach(drawWave);
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+})();
+
+
+// ═══════════════════════════════════════════════════════
+//  PARTICLE CANVAS
+// ═══════════════════════════════════════════════════════
+(function() {
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COUNT = 120;
+  const particles = [];
+
+  for (let i = 0; i < COUNT; i++) {
+    particles.push({
+      x:     Math.random() * 1.2 - 0.1,  // normalized, allow offscreen
+      y:     Math.random(),
+      size:  Math.random() * 1.8 + 0.4,
+      speed: Math.random() * 0.00004 + 0.00001,
+      alpha: Math.random() * 0.6 + 0.1,
+      pulse: Math.random() * Math.PI * 2,  // phase offset
+      pulseSpeed: Math.random() * 0.001 + 0.0005,
+      drift: (Math.random() - 0.5) * 0.00002,  // slow vertical drift
+    });
+  }
+
+  function animate(ts) {
+    ctx.clearRect(0, 0, W, H);
+
+    for (const p of particles) {
+      // Drift slowly to the right, wrap around
+      p.x += p.speed;
+      p.y += p.drift;
+      if (p.x > 1.1) p.x = -0.1;
+      if (p.y < 0) p.y = 1;
+      if (p.y > 1) p.y = 0;
+
+      // Pulse opacity
+      const a = p.alpha * (0.5 + 0.5 * Math.sin(ts * p.pulseSpeed + p.pulse));
+
+      const px = p.x * W;
+      const py = p.y * H;
+
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.shadowColor = 'rgba(180, 230, 255, 0.9)';
+      ctx.shadowBlur  = p.size * 4;
+      ctx.fillStyle   = 'rgba(200, 235, 255, 1)';
+      ctx.beginPath();
+      ctx.arc(px, py, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+})();
+
+
+// ═══════════════════════════════════════════════════════
+//  CLOCK
+// ═══════════════════════════════════════════════════════
+(function() {
+  function update() {
+    const now = new Date();
+    let h = now.getHours();
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    const d = now.getDate();
+    const mo = now.getMonth() + 1;
+    document.getElementById('clock').textContent = `${mo}/${d} ${h}:${m} ${ampm}`;
+  }
+  update();
+  setInterval(update, 10000);
+})();
+
+
+// ═══════════════════════════════════════════════════════
+//  XMB NAVIGATION
+// ═══════════════════════════════════════════════════════
+(function() {
+  const icons = document.querySelectorAll('.xmb-icon');
+  const options = document.querySelectorAll('.xmb-option');
+  let activeIcon = 2;
+  let activeOpt  = 0;
+
+  const optionSets = {
+    0: ['Quién soy', 'Mi historia', 'Formación'],
+    1: ['Web Apps', 'APIs', 'Proyectos Open Source', 'Demos'],
+    2: ['Frontend', 'Backend', 'Herramientas', 'Idiomas'],
+    3: ['Email', 'LinkedIn', 'GitHub', 'WhatsApp'],
+    4: ['CV / Currículum', 'Certificados', 'Sobre este sitio'],
+  };
+
+  function updateIcons() {
+    icons.forEach((el, i) => {
+      el.classList.remove('active', 'near');
+      const dist = Math.abs(i - activeIcon);
+      if (dist === 0) el.classList.add('active');
+      else if (dist === 1) el.classList.add('near');
+    });
+  }
+
+  function updateOptions() {
+    options.forEach((el, i) => {
+      el.classList.toggle('active', i === activeOpt);
+    });
+  }
+
+  updateIcons();
+  updateOptions();
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') {
+      activeIcon = Math.max(0, activeIcon - 1);
+      activeOpt = 0;
+      updateIcons();
+      updateOptions();
+    } else if (e.key === 'ArrowRight') {
+      activeIcon = Math.min(icons.length - 1, activeIcon + 1);
+      activeOpt = 0;
+      updateIcons();
+      updateOptions();
+    } else if (e.key === 'ArrowUp') {
+      activeOpt = Math.max(0, activeOpt - 1);
+      updateOptions();
+    } else if (e.key === 'ArrowDown') {
+      activeOpt = Math.min(options.length - 1, activeOpt + 1);
+      updateOptions();
+    }
+  });
+
+  // Click on icons
+  icons.forEach((el, i) => {
+    el.addEventListener('click', () => {
+      activeIcon = i;
+      activeOpt = 0;
+      updateIcons();
+      updateOptions();
+    });
+  });
+})();
+</script>
+</body>
+</html>
