@@ -7,9 +7,13 @@ import humanoia1 from "./assets/screenshots/humanoia-1.png";
 import humanoia2 from "./assets/screenshots/humanoia-2.png";
 import humanoia3 from "./assets/screenshots/humanoia-3.png";
 import formulafacil1 from "./assets/screenshots/formulafacil.png";
-import formulafacil2 from "./assets/screenshots/formulafacil2.png";
+import formulafacilUtn from "./assets/screenshots/formulafacil-utn.png";
+import formulafacilClassic from "./assets/screenshots/formulafacil-classic.png";
+import formulafacilPractice from "./assets/screenshots/formulafacil-practice.png";
 import certificadoImg from "./assets/screenshots/certificado.jpg";
 import reservationWorkflow from "./assets/screenshots/reservation-workflow.png";
+import reservationBitrix from "./assets/screenshots/reservation-bitrix.png";
+import reservationIntermedia from "./assets/screenshots/reservation-intermedia.png";
 
 // ========================= TIPOS =========================
 
@@ -71,7 +75,7 @@ class TranslationManager {
       bio: "Soy Isaac José García Márquez, un desarrollador apasionado por la tecnología y la programación. Me especializo en desarrollo web y análisis de datos, siempre buscando aprender nuevas tecnologías y mejorar mis habilidades.",
       emailCopied: "Email copiado",
       copyManual: "Copia manual",
-      developer: "Desarrollador Web Fullstack",
+      developer: "Estudiante de Ingeniería en Sistemas especializado en automatización e integración de sistemas",
       nanana: "¡Ver mis Proyectos!",
     },
     en: {
@@ -91,7 +95,7 @@ class TranslationManager {
       bio: "I'm Isaac José García Márquez, a developer passionate about technology and programming. I specialize in web development and data analysis, always looking to learn new technologies and improve my skills.",
       emailCopied: "Email copied",
       copyManual: "Copy manually",
-      developer: "Fullstack Web Developer",
+      developer: "Systems Engineering student specialized in automation and systems integration",
       nanana: "¡Check out my Projects!",
     },
   } as const;
@@ -207,7 +211,7 @@ class ProjectRepository {
       },
       "HTML5 • CSS3 • JavaScript • MathJax • SVG",
       formulafacil1,
-      [formulafacil1, formulafacil2],
+      [formulafacilUtn, formulafacilClassic, formulafacilPractice],
       {
         es: [
           "+3.000 usuarios alcanzados en 2026",
@@ -257,7 +261,7 @@ class ProjectRepository {
       },
       "n8n • Bitrix24 API • PostgreSQL • Supabase • JavaScript • IMAP",
       reservationWorkflow,
-      [reservationWorkflow],
+      [reservationWorkflow, reservationIntermedia, reservationBitrix],
       {
         es: [
           "Lectura de emails de confirmación vía IMAP (Airbnb y Booking)",
@@ -354,10 +358,10 @@ class TechnologyRepository {
 
     const masteredTechs = [
       new Technology("Python", "/logos/python.png", "mastered", true, pythonDetail),
-      new Technology("HTML", "/logos/html5.png", "mastered"),
-      new Technology("CSS", "/logos/css3.png", "mastered"),
       new Technology("JavaScript", "/logos/javascript.png", "mastered"),
       new Technology("git", "/logos/git.png", "mastered"),
+      new Technology("APIs REST", "/logos/rest-api.svg", "mastered"),
+      new Technology("n8n", "/logos/n8n.svg", "mastered"),
     ];
 
     const learningTechs = [
@@ -668,6 +672,38 @@ const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "o
   );
 });
 
+const RotatingImage: React.FC<{ project: Project; alt: string; paused: boolean }> = ({ project, alt, paused }) => {
+  const allImages = useMemo(() => {
+    const imgs = project.images.length > 0 ? project.images : [project.mainImage];
+    return project.images.includes(project.mainImage)
+      ? imgs
+      : [project.mainImage, ...imgs];
+  }, [project]);
+
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (allImages.length <= 1 || paused) return;
+    const id = setInterval(() => setIndex(i => (i + 1) % allImages.length), 5000);
+    return () => clearInterval(id);
+  }, [allImages.length, paused]);
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.img
+        key={allImages[index]}
+        src={allImages[index]}
+        alt={alt}
+        className="w-full h-full object-cover"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+      />
+    </AnimatePresence>
+  );
+};
+
 // ========================= SECCIONES =========================
 
 const AboutSection: React.FC<{ 
@@ -683,7 +719,7 @@ const AboutSection: React.FC<{
           <div className="md:w-2/3">
             <div className="text-xl font-semibold mb-4 text-blue-300">Isaac José García Márquez</div>
             <div className="text-lg font-semibold mb-4 text-cyan-400">
-              Desarrollador Full Stack especializado en aplicaciones web modernas
+              {translations.developer}
             </div>
             
             <div className="mb-6">
@@ -725,6 +761,7 @@ const ProjectsSection: React.FC<{
   projectRepo: ProjectRepository;
 }> = ({ translations, lang, projectRepo }) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const projects = projectRepo.getAllProjects();
   
   const openProjectDetails = useCallback((proj: Project) => setSelectedProject(proj), []);
@@ -745,7 +782,7 @@ const ProjectsSection: React.FC<{
       
       <div className="grid md:grid-cols-2 gap-6">
         {projects.map((project, index) => (
-          <div key={index} className="relative group cursor-pointer">
+          <div key={index} className="relative group cursor-pointer" onMouseEnter={() => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
             <div className={`relative bg-gradient-to-br ${project.gradient} rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl`}>
               
               <div className="absolute top-4 right-4 z-20">
@@ -761,11 +798,7 @@ const ProjectsSection: React.FC<{
               </div>
 
               <div className="relative h-48 overflow-hidden">
-                <img 
-                  src={project.mainImage} 
-                  alt={`Preview de ${project.name}`}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
+                <RotatingImage project={project} alt={`Preview de ${project.name}`} paused={hoveredIndex === index} />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
               </div>
 
@@ -993,23 +1026,33 @@ const TechnologiesSection: React.FC<{
   );
 };
 
-const ContactSection: React.FC<{ 
-  translations: Translations; 
+const ContactSection: React.FC<{
+  translations: Translations;
+  lang: Lang;
   onCopyEmail: () => void;
-}> = ({ translations, onCopyEmail }) => {
+}> = ({ translations, lang, onCopyEmail }) => {
   return (
     <div>
       <SectionTitle>{translations.contact}</SectionTitle>
-      <div className="p-6 border border-blue-500/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-6 max-w-2xl mx-auto">
-        <div className="text-center">
-          <h3>¿Querés colaborar o tenés alguna duda?</h3>
+
+      <div className="max-w-2xl mx-auto space-y-4">
+
+        <div className="flex items-center justify-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_6px_2px_rgba(74,222,128,0.5)] animate-pulse"></span>
+          <span className="text-sm text-green-300 font-medium">
+            {lang === "es" ? "Disponible para oportunidades remotas" : "Available for remote opportunities"}
+          </span>
         </div>
-        
-        <div className="text-center space-y-4">
-          <div className="text-lg font-medium text-blue-300">
-            Email: <strong className="text-blue-300">{AppConfig.EMAIL}</strong>
+
+        <div className="p-6 border border-blue-500/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-5">
+          <div>
+            <p className="text-sm text-gray-300 leading-relaxed text-center">
+              {lang === "es"
+                ? "Escribime por email o conectá en LinkedIn. Respondo en menos de 24hs."
+                : "Email me or connect on LinkedIn. I respond in under 24 hours."}
+            </p>
           </div>
-          
+
           <div className="flex gap-3 justify-center">
             <a
               href={`https://mail.google.com/mail/?view=cm&fs=1&to=${AppConfig.EMAIL}`}
@@ -1019,58 +1062,89 @@ const ContactSection: React.FC<{
             >
               {translations.sendEmail}
             </a>
-            <button 
-              onClick={onCopyEmail} 
+            <button
+              onClick={onCopyEmail}
               className="px-4 py-2 text-sm border border-gray-500/50 rounded hover:bg-gray-600/20 transition-colors"
             >
               {translations.copyEmail}
             </button>
           </div>
+
+          <div className="pt-4 border-t border-gray-700 flex gap-3 justify-center">
+            <button
+              onClick={AppConfig.openLinkedIn}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm border border-blue-500/50 rounded bg-blue-600/20 hover:bg-blue-600/40 transition-colors"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.93v5.68H9.35V9h3.42v1.56h.05c.48-.91 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51v6.23zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.13 20.45H3.55V9h3.58v11.45z" />
+              </svg>
+              LinkedIn
+            </button>
+            <button
+              onClick={AppConfig.openGitHub}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
+              </svg>
+              GitHub
+            </button>
+          </div>
         </div>
 
-        <div className="pt-4 border-t border-gray-700 text-center">
-          <button
-            onClick={AppConfig.openLinkedIn}
-            className="inline-flex items-center gap-2 px-4 py-3 text-sm border border-blue-500/50 rounded bg-blue-600/20 hover:bg-blue-600/40 transition-colors"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-              <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.93v5.68H9.35V9h3.42v1.56h.05c.48-.91 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51v6.23zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.13 20.45H3.55V9h3.58v11.45z" />
-            </svg>
-            LinkedIn
-          </button>
-        </div>
       </div>
     </div>
   );
 };
 
-const LearnMoreSection: React.FC<{ translations: Translations }> = ({ translations }) => {
+const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = ({ translations, lang }) => {
   return (
     <div>
       <SectionTitle>{translations.learnMore}</SectionTitle>
-      <div className="p-6 border border-blue-500/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-4 max-w-2xl mx-auto">
-        <p className="text-sm mb-4 text-center text-gray-300">{translations.dowloadcv2}</p>
-        <div className="text-center">
-          <a 
-            href={AppConfig.CV_PATH} 
-            download 
-            className="inline-block px-6 py-3 text-sm border border-blue-500/50 rounded bg-blue-600/20 hover:bg-blue-600/40 transition-colors mb-4"
-          >
-            {translations.downloadCV}
-          </a>
+      <div className="max-w-3xl mx-auto space-y-4">
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { value: "3", label: lang === "es" ? "Proyectos" : "Projects" },
+            { value: "+3.000", label: lang === "es" ? "Usuarios" : "Users" },
+            { value: "UTN", label: lang === "es" ? "Ing. en Sistemas" : "Systems Eng." },
+          ].map(({ value, label }) => (
+            <div key={label} className="p-4 border border-blue-500/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
+              <div className="text-2xl font-bold text-blue-300">{value}</div>
+              <div className="text-xs text-gray-400 mt-1">{label}</div>
+            </div>
+          ))}
         </div>
 
-        <div className="pt-4 border-t border-gray-700 text-center">
-          <button
-            onClick={AppConfig.openGitHub}
-            className="inline-flex items-center gap-2 px-4 py-3 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-              <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
-            </svg>
-            GitHub
-          </button>
+        {/* Descripción */}
+        <div className="p-6 border border-blue-500/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-4">
+          <p className="text-sm text-gray-300 leading-relaxed">
+            {lang === "es"
+              ? "Estudiante de Ingeniería en Sistemas en la UTN, con foco en automatización, integración de APIs e interfaces web. Me interesa el desarrollo de herramientas que resuelvan problemas reales de forma eficiente."
+              : "Systems Engineering student at UTN, focused on automation, API integration and web interfaces. I'm interested in building tools that solve real problems efficiently."}
+          </p>
+
+          <div className="pt-3 border-t border-gray-700 flex flex-wrap gap-3 justify-center">
+            <a
+              href={AppConfig.CV_PATH}
+              download
+              className="inline-block px-6 py-2.5 text-sm border border-blue-500/50 rounded bg-blue-600/20 hover:bg-blue-600/40 transition-colors"
+            >
+              {translations.downloadCV}
+            </a>
+            <button
+              onClick={AppConfig.openGitHub}
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
+              </svg>
+              GitHub
+            </button>
+          </div>
         </div>
+
       </div>
     </div>
   );
@@ -1154,9 +1228,9 @@ const ContentRenderer: React.FC<{
     case 2: 
       return <TechnologiesSection translations={translations} lang={lang} techRepo={techRepo} />;
     case 3: 
-      return <ContactSection translations={translations} onCopyEmail={onCopyEmail} />;
+      return <ContactSection translations={translations} lang={lang} onCopyEmail={onCopyEmail} />;
     case 4: 
-      return <LearnMoreSection translations={translations} />;
+      return <LearnMoreSection translations={translations} lang={lang} />;
     default: 
       return <AboutSection translations={translations} lang={lang} onSetActive={onSetActive} />;
   }
