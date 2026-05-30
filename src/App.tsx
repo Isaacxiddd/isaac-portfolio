@@ -9,6 +9,7 @@ import humanoia3 from "./assets/screenshots/humanoia-3.png";
 import formulafacil1 from "./assets/screenshots/formulafacil.png";
 import formulafacil2 from "./assets/screenshots/formulafacil2.png";
 import certificadoImg from "./assets/screenshots/certificado.jpg";
+import reservationWorkflow from "./assets/screenshots/reservation-workflow.png";
 
 // ========================= TIPOS =========================
 
@@ -131,7 +132,8 @@ class Project {
     public readonly features: { es: string[]; en: string[] } = { es: [], en: [] },
     public readonly challenges: { es: string[]; en: string[] } = { es: [], en: [] },
     public readonly category: string = "Frontend",
-    public readonly gradient: string = "from-blue-600 to-teal-600"
+    public readonly gradient: string = "from-blue-600 to-teal-600",
+    public readonly icon: string = "🎮"
   ) {}
 
   getDescription(lang: Lang): string {
@@ -196,18 +198,19 @@ class ProjectRepository {
       "Formula Fácil UTN",
       "https://formulafacilutn.neocities.org",
       {
-        es: "Herramienta educativa interactiva para memorizar fórmulas matemáticas de manera efectiva y entretenida.",
-        en: "Interactive educational tool for memorizing mathematical formulas effectively and entertainingly."
+        es: "Herramienta educativa para estudiantes de la UTN con más de 3.000 usuarios. Memorización de fórmulas matemáticas mediante gamificación y práctica activa.",
+        en: "Educational tool for UTN students with over 3,000 users. Mathematical formula memorization through gamification and active practice."
       },
       {
-        es: "Proyecto educativo web diseñado para estudiantes de la Universidad Tecnológica Nacional (UTN) que necesitan memorizar fórmulas matemáticas de manera efectiva y entretenida. Una aplicación de aprendizaje gamificado que combina memorización con juego interactivo, permitiendo a los estudiantes conectar fórmulas matemáticas con sus figuras geométricas correspondientes.",
-        en: "Educational web project designed for students of the National Technological University (UTN) who need to memorize mathematical formulas effectively and entertainingly. A gamified learning application that combines memorization with interactive play, allowing students to connect mathematical formulas with their corresponding geometric figures."
+        es: "Herramienta educativa interactiva creada para estudiantes de la UTN que ayuda a memorizar fórmulas matemáticas mediante técnicas de gamificación y práctica activa.\n\nLa plataforma alcanzó más de 3.000 usuarios y fue utilizada por estudiantes para reforzar contenidos de Análisis Matemático y Geometría, combinando aprendizaje visual, ejercicios interactivos y seguimiento del progreso.\n\nDesarrollada íntegramente con HTML, CSS y JavaScript, incorpora renderizado matemático con MathJax, gráficos SVG dinámicos y un sistema de puntuación y rachas en tiempo real para mejorar la retención de conceptos.",
+        en: "Interactive educational tool created for UTN students that helps memorize mathematical formulas through gamification techniques and active practice.\n\nThe platform reached over 3,000 users and was used by students to reinforce content from Mathematical Analysis and Geometry, combining visual learning, interactive exercises and progress tracking.\n\nBuilt entirely with HTML, CSS and JavaScript, it incorporates mathematical rendering with MathJax, dynamic SVG graphics and a real-time scoring and streak system to improve concept retention."
       },
       "HTML5 • CSS3 • JavaScript • MathJax • SVG",
       formulafacil1,
       [formulafacil1, formulafacil2],
       {
         es: [
+          "+3.000 usuarios alcanzados en 2026",
           "5 módulos temáticos: Funciones, Inecuaciones, Geometría, Valor Absoluto, Intervalos",
           "Dos modos de juego: Classic y Practice con niveles de dificultad",
           "Sistema de gamificación con puntos, rachas y efectos de sonido",
@@ -215,6 +218,7 @@ class ProjectRepository {
           "Diseño responsive optimizado para celular y escritorio"
         ],
         en: [
+          "+3,000 users reached in 2026",
           "5 thematic modules: Functions, Inequalities, Geometry, Absolute Value, Intervals",
           "Two game modes: Classic and Practice with difficulty levels",
           "Gamification system with points, streaks and sound effects",
@@ -240,7 +244,56 @@ class ProjectRepository {
       "from-teal-600 to-blue-600"
     );
 
-    this.projects.push(humanoiaProject, formulaFacilProject);
+    const reservationProject = new Project(
+      "Automatización de Reservas",
+      "https://github.com/Isaacxiddd/Reservation-automation",
+      {
+        es: "Sistema de automatización que conecta reservas de Airbnb/Booking con el CRM Bitrix24 usando n8n.",
+        en: "Automation system that connects Airbnb/Booking reservations with Bitrix24 CRM using n8n."
+      },
+      {
+        es: "Sistema de automatización que procesa correos de confirmación de Airbnb y Booking.com vía IMAP, clasifica el tipo de evento (nueva reserva, cancelación, mensaje, reseña), extrae los datos del huésped y la propiedad, y los registra automáticamente como deals en Bitrix24. Incluye validación anti-duplicados con PostgreSQL/Supabase y lógica de fallback: si no encuentra la propiedad, crea el deal igual y genera una tarea manual para intervención.",
+        en: "Automation system that processes Airbnb and Booking.com confirmation emails via IMAP, classifies event types (new booking, cancellation, message, review), extracts guest and property data, and automatically registers them as deals in Bitrix24. Includes anti-duplication validation with PostgreSQL/Supabase and fallback logic: if the property isn't found, it still creates the deal and generates a manual task for intervention."
+      },
+      "n8n • Bitrix24 API • PostgreSQL • Supabase • JavaScript • IMAP",
+      reservationWorkflow,
+      [reservationWorkflow],
+      {
+        es: [
+          "Lectura de emails de confirmación vía IMAP (Airbnb y Booking)",
+          "Clasificación automática del tipo de evento",
+          "Extracción de datos: huésped, propiedad, fechas, código de confirmación",
+          "Creación automática de deals en Bitrix24 con tareas vinculadas",
+          "Validación anti-duplicados con base de datos PostgreSQL/Supabase",
+          "Fallback resiliente: crea el deal aunque falle el matching de propiedad"
+        ],
+        en: [
+          "Confirmation email reading via IMAP (Airbnb and Booking)",
+          "Automatic classification of event type",
+          "Data extraction: guest, property, dates, confirmation code",
+          "Automatic deal creation in Bitrix24 with linked tasks",
+          "Anti-duplication validation with PostgreSQL/Supabase database",
+          "Resilient fallback: creates the deal even if property matching fails"
+        ]
+      },
+      {
+        es: [
+          "Diseño de lógica de fallback para evitar pérdida de reservas ante fallas de matching",
+          "Implementación de índice anti-duplicados persistente en Supabase",
+          "Parsing robusto de emails con múltiples formatos de Airbnb y Booking"
+        ],
+        en: [
+          "Fallback logic design to avoid losing reservations on matching failures",
+          "Implementation of persistent anti-duplication index in Supabase",
+          "Robust email parsing handling multiple formats from Airbnb and Booking"
+        ]
+      },
+      "Automatización",
+      "from-orange-500 to-amber-600",
+      "⚡"
+    );
+
+    this.projects.push(formulaFacilProject, reservationProject, humanoiaProject);
   }
 
   getAllProjects(): Project[] {
@@ -288,8 +341,8 @@ class TechnologyRepository {
       name: "Python",
       logo: "/logos/python.png",
       description: {
-        es: "Aprendí Python a través de un curso completo de la ciudad, donde me enfoqué en análisis de datos y visualización.",
-        en: "I learned Python through a comprehensive city course, where I focused on data analysis and visualization."
+        es: "Formación en Python orientada al análisis de datos, visualización y procesamiento de información. Experiencia trabajando con Pandas y Matplotlib para transformar datos en información útil.",
+        en: "Python training focused on data analysis, visualization and information processing. Experience working with Pandas and Matplotlib to transform data into useful insights."
       },
       learningSource: { es: "Curso de la Ciudad", en: "City Course" },
       skills: {
@@ -659,20 +712,6 @@ const AboutSection: React.FC<{
           <div className="md:w-1/3 flex flex-col items-center md:items-end justify-center">
             <img src="/avatar.jpg" alt="avatar" className="w-full max-w-[200px] rounded-xl object-cover border border-blue-500/30 shadow-lg mb-4" />
             
-            <div className="space-y-2 text-center md:text-right">
-              <div className="flex flex-wrap gap-2 justify-center md:justify-end">
-                <span className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full border border-yellow-500/30">JavaScript</span>
-                <span className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full border border-yellow-500/30">Python</span>
-              </div>
-              <div className="flex flex-wrap gap-2 justify-center md:justify-end">
-                <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full border border-blue-500/30">TypeScript</span>
-                <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full border border-blue-500/30">React</span>
-              </div>
-              <div className="flex flex-wrap gap-2 justify-center md:justify-end">
-                <span className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full border border-green-500/30">Node.js</span>
-                <span className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full border border-green-500/30">Git</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -717,7 +756,7 @@ const ProjectsSection: React.FC<{
 
               <div className="absolute top-6 left-6 z-20">
                 <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                  <span className="text-white text-lg">🎮</span>
+                  <span className="text-white text-lg">{project.icon}</span>
                 </div>
               </div>
 
@@ -972,12 +1011,14 @@ const ContactSection: React.FC<{
           </div>
           
           <div className="flex gap-3 justify-center">
-            <button 
-              onClick={AppConfig.openEmail} 
+            <a
+              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${AppConfig.EMAIL}`}
+              target="_blank"
+              rel="noreferrer"
               className="px-4 py-2 text-sm border border-blue-500/50 rounded bg-blue-600/20 hover:bg-blue-600/40 transition-colors"
             >
               {translations.sendEmail}
-            </button>
+            </a>
             <button 
               onClick={onCopyEmail} 
               className="px-4 py-2 text-sm border border-gray-500/50 rounded hover:bg-gray-600/20 transition-colors"
@@ -1124,7 +1165,7 @@ const ContentRenderer: React.FC<{
 const Footer: React.FC = () => (
   <footer className="mt-auto p-4 border-t border-blue-500/30 bg-black/20 backdrop-blur-sm">
     <div className="text-center text-xs opacity-60">
-      © 2024 Isaac José García Márquez - Todos los derechos reservados
+      © 2026 Isaac José García Márquez - Todos los derechos reservados
     </div>
   </footer>
 );

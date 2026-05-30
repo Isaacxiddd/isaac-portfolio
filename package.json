@@ -2,10 +2,11 @@
   "name": "isaac-portfolio",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@11.1.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npx vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "fetch:logos": "node ./scripts/fetch-logos.mjs"
   },
@@ -14,6 +15,9 @@
     "lucide-react": "^0.575.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
