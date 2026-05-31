@@ -18,6 +18,7 @@ import reservationIntermedia from "./assets/screenshots/reservation-intermedia.p
 // ========================= TIPOS =========================
 
 type Lang = 'es' | 'en';
+type Theme = 'dark' | 'ps3';
 
 interface Translations {
 menu: readonly string[];  aboutTitle: string;
@@ -69,13 +70,13 @@ class TranslationManager {
       dowloadcv2: "Descargá mi CV actualizado para conocer más sobre mi experiencia.",
       copyEmail: "Copiar email",
       sendEmail: "Enviar email",
-      openProject: "Abrir proyecto",
+      openProject: "Abrir",
       mastered: "Manejo",
       learning: "Aprendiendo",
       bio: "Soy Isaac José García Márquez, un desarrollador apasionado por la tecnología y la programación. Me especializo en desarrollo web y análisis de datos, siempre buscando aprender nuevas tecnologías y mejorar mis habilidades.",
       emailCopied: "Email copiado",
       copyManual: "Copia manual",
-      developer: "Estudiante de Ingeniería en Sistemas especializado en automatización e integración de sistemas",
+      developer: "Desarrollador Backend y Automatización de Sistemas",
       nanana: "¡Ver mis Proyectos!",
     },
     en: {
@@ -89,13 +90,13 @@ class TranslationManager {
       dowloadcv2: "Download my updated CV to learn more about my experience.",
       copyEmail: "Copy email",
       sendEmail: "Send email",
-      openProject: "Open project",
+      openProject: "Open",
       mastered: "Mastered",
       learning: "Learning",
       bio: "I'm Isaac José García Márquez, a developer passionate about technology and programming. I specialize in web development and data analysis, always looking to learn new technologies and improve my skills.",
       emailCopied: "Email copied",
       copyManual: "Copy manually",
-      developer: "Systems Engineering student specialized in automation and systems integration",
+      developer: "Backend Developer & Systems Automation",
       nanana: "¡Check out my Projects!",
     },
   } as const;
@@ -137,7 +138,8 @@ class Project {
     public readonly challenges: { es: string[]; en: string[] } = { es: [], en: [] },
     public readonly category: string = "Frontend",
     public readonly gradient: string = "from-blue-600 to-teal-600",
-    public readonly icon: string = "🎮"
+    public readonly icon: string = "🎮",
+    public readonly githubUrl?: string
   ) {}
 
   getDescription(lang: Lang): string {
@@ -195,7 +197,9 @@ class ProjectRepository {
         en: ["Image optimization for fast loading", "Creation of balanced selection algorithm"]
       },
       "Frontend",
-      "from-purple-500 to-pink-500"
+      "from-purple-500 to-pink-500",
+      "🎮",
+      "https://github.com/Isaacxiddd/HumanoIA"
     );
 
     const formulaFacilProject = new Project(
@@ -245,7 +249,9 @@ class ProjectRepository {
         ]
       },
       "Frontend",
-      "from-teal-600 to-blue-600"
+      "from-teal-600 to-blue-600",
+      "🎮",
+      "https://github.com/Isaacxiddd/FormulafacilUTN"
     );
 
     const reservationProject = new Project(
@@ -570,9 +576,9 @@ function useTranslations() {
   };
 }
 
-function useToast() {
+function useToast(theme: Theme) {
   const [message, setMessage] = useState<string | null>(null);
-  
+
   useEffect(() => {
     if (!message) return;
     const id = setTimeout(() => setMessage(null), 1600);
@@ -590,38 +596,107 @@ function useToast() {
           bottom: 20,
           left: "50%",
           transform: "translateX(-50%)",
-          background: "#071028",
+          background: theme === 'ps3' ? "rgba(228,240,255,0.97)" : "#071028",
           padding: "10px 14px",
           borderRadius: 8,
-          boxShadow: "0 6px 30px rgba(0,0,0,0.6)",
+          boxShadow: theme === 'ps3'
+            ? "0 6px 30px rgba(0,80,200,0.25)"
+            : "0 6px 30px rgba(0,0,0,0.6)",
           zIndex: 9999,
           fontFamily: "Inter, system-ui",
           fontSize: 12,
-          color: "white",
+          color: theme === 'ps3' ? "#0c1e42" : "white",
+          border: theme === 'ps3' ? "1px solid rgba(0,80,200,0.2)" : "none",
         }}
       >
         {message}
       </div>
-    ) : null, [message]);
+    ) : null, [message, theme]);
 
   return { toast, ToastNode };
 }
 
 // ========================= COMPONENTES =========================
 
+const PS3Ribbons: React.FC<{ theme: Theme }> = React.memo(({ theme }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const ribbons = Array.from({ length: 18 }, (_, i) => ({
+      baseY: (window.innerHeight / 18) * (i + 0.5),
+      amplitude: 12 + Math.random() * 65,
+      wavelength: 280 + Math.random() * 620,
+      speed: 0.12 + Math.random() * 0.42,
+      width: 0.4 + Math.random() * 2.2,
+      alpha: 0.028 + Math.random() * 0.082,
+      phase: Math.random() * Math.PI * 2,
+    }));
+
+    let t = 0;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const isPS3 = theme === 'ps3';
+      for (const r of ribbons) {
+        ctx.beginPath();
+        ctx.lineWidth = r.width;
+        ctx.strokeStyle = isPS3
+          ? `rgba(18, 72, 178, ${r.alpha})`
+          : `rgba(14, 165, 255, ${r.alpha * 0.9})`;
+        const freq = (2 * Math.PI) / r.wavelength;
+        for (let x = 0; x <= canvas.width + 6; x += 4) {
+          const y = r.baseY + Math.sin(x * freq + t * r.speed + r.phase) * r.amplitude;
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+      t += 0.011;
+      rafRef.current = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener('resize', resize);
+    };
+  }, [theme]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none"
+      style={{ zIndex: 0, opacity: theme === 'ps3' ? 0.85 : 0.55 }}
+      aria-hidden
+    />
+  );
+});
+
 const Modal: React.FC<{ open: boolean; onClose: () => void; children: React.ReactNode }> = ({ open, onClose, children }) => {
   return (
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50"
+          className="fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
         >
           <motion.div
-            className="bg-gray-900 border border-blue-500/30 rounded max-w-4xl max-h-[90vh] overflow-y-auto relative"
+            className="bg-gray-900 border border-cyberaccent/30 rounded max-w-4xl max-h-[90vh] overflow-y-auto relative"
             initial={{ scale: 0.9, opacity: 0, y: 30 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 30 }}
@@ -645,7 +720,10 @@ const Modal: React.FC<{ open: boolean; onClose: () => void; children: React.Reac
 };
 
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h2 className="text-3xl font-bold text-center mb-8 text-blue-300">{children}</h2>
+  <div className="text-center mb-8">
+    <h2 className="text-3xl font-bold text-cyberaccent">{children}</h2>
+    <div className="mt-2 mx-auto w-10 h-0.5 rounded-full bg-gradient-to-r from-cyberaccent to-neondanger" />
+  </div>
 );
 
 type TechPillProps = {
@@ -662,15 +740,26 @@ const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "o
     variant === "ok"
       ? "bg-green-500/10 border border-green-500/30 hover:bg-green-500/20 hover:border-green-400/50 hover:shadow-lg hover:shadow-green-500/25"
       : "bg-orange-500/10 border border-orange-500/30 hover:bg-orange-500/20 hover:border-orange-400/50 hover:shadow-lg hover:shadow-orange-500/25";
-  
+
   return (
-    <div className={`${base} ${variantClasses} ${hasDetail ? "hover:brightness-110" : ""}`} onClick={onClick}>
+    <motion.div variants={popIn} className={`${base} ${variantClasses} ${hasDetail ? "hover:brightness-110" : ""}`} onClick={onClick}>
       <img src={logo} alt={name} className="w-12 h-12 object-contain" />
       <span className="text-sm font-medium text-center">{name}</span>
       {hasDetail && <span className="text-xs opacity-60">ℹ️ Info</span>}
-    </div>
+    </motion.div>
   );
 });
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.28 } }
+};
+const popIn = {
+  hidden: { opacity: 0, scale: 0.88 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.22 } }
+};
+const staggerGrid = { visible: { transition: { staggerChildren: 0.1 } } };
+const staggerPills = { visible: { transition: { staggerChildren: 0.055 } } };
 
 const RotatingImage: React.FC<{ project: Project; alt: string; paused: boolean }> = ({ project, alt, paused }) => {
   const allImages = useMemo(() => {
@@ -714,42 +803,65 @@ const AboutSection: React.FC<{
   return (
     <div>
       <SectionTitle>{translations.aboutTitle}</SectionTitle>
-      <div className="bg-black/20 backdrop-blur-[2px] p-6 rounded-xl border border-blue-500/30">
-        <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
+      <div className="bg-black/20 backdrop-blur-[2px] p-6 rounded-xl border border-cyberaccent/30">
+        <motion.div className="flex flex-col md:flex-row gap-6 items-center md:items-start" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
           <div className="md:w-2/3">
-            <div className="text-xl font-semibold mb-4 text-blue-300">Isaac José García Márquez</div>
-            <div className="text-lg font-semibold mb-4 text-cyan-400">
+            <motion.div variants={fadeUp} className="text-xl font-semibold mb-4 text-cyberaccent">Isaac José García Márquez</motion.div>
+            <motion.div variants={fadeUp} className="text-sm font-semibold mb-4 text-cyan-400">
               {translations.developer}
-            </div>
-            
-            <div className="mb-6">
-              <p className="text-[14px] leading-6 text-gray-200">
-                {lang === "es" 
-                  ? "Apasionado por la tecnología desde chico y naturalmente curioso. Disfruto crear software que resuelva problemas reales. Actualmente soy estudiante de Ingeniería en Sistemas en la UTN y hablo varios idiomas."
-                  : "Passionate about technology since childhood and naturally curious. I enjoy creating software that solves real problems. Currently studying Systems Engineering at UTN and speak several languages."
-                }
-              </p>
-            </div>
-            
-            <div className="mt-8 flex items-center gap-3">
-              <div className="flex items-center gap-2 group cursor-pointer">
-                <span 
-                  className="text-sm font-semibold text-yellow-400 cursor-pointer transition-all duration-300 hover:scale-110 hover:text-yellow-300 hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]"
-                  style={{
-                    animation: 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-                  }}
-                  onClick={() => onSetActive(1)} 
-                >
-                  {lang === "es" ? "Explorar proyectos →" : "Explore projects →"}
-                </span>
-              </div>
-            </div>
+            </motion.div>
+            <motion.p variants={fadeUp} className="text-[14px] leading-6 text-gray-200 mb-6">
+              {lang === "es"
+                ? "Estudiante de Ingeniería en Sistemas. Construyo aplicaciones web y soluciones de automatización con foco en backend, integración de sistemas y resolución de problemas mediante software."
+                : "Systems Engineering student. I build web applications and automation solutions focused on backend, systems integration, and problem-solving through software."
+              }
+            </motion.p>
+
+            <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-4">
+              <button
+                onClick={AppConfig.openGitHub}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-gray-500/50 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
+                </svg>
+                GitHub
+              </button>
+              <button
+                onClick={AppConfig.openLinkedIn}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-cyberaccent/50 rounded-lg bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.93v5.68H9.35V9h3.42v1.56h.05c.48-.91 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51v6.23zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.13 20.45H3.55V9h3.58v11.45z" />
+                </svg>
+                LinkedIn
+              </button>
+              <a
+                href={AppConfig.CV_PATH}
+                download
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-cyberaccent/50 rounded-lg bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                {lang === "es" ? "Descargar CV" : "Download CV"}
+              </a>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="flex items-center gap-3">
+              <span
+                className="text-sm font-semibold text-yellow-400 cursor-pointer transition-all duration-300 hover:scale-110 hover:text-yellow-300 hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]"
+                style={{ animation: 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
+                onClick={() => onSetActive(1)}
+              >
+                {lang === "es" ? "Explorar proyectos →" : "Explore projects →"}
+              </span>
+            </motion.div>
           </div>
-          <div className="md:w-1/3 flex flex-col items-center md:items-end justify-center">
-            <img src="/avatar.jpg" alt="avatar" className="w-full max-w-[200px] rounded-xl object-cover border border-blue-500/30 shadow-lg mb-4" />
-            
-          </div>
-        </div>
+          <motion.div variants={fadeUp} className="md:w-1/3 flex flex-col items-center md:items-end justify-center">
+            <img src="/avatar.jpg" alt="avatar" className="w-full max-w-[200px] rounded-xl object-cover border border-cyberaccent/30 shadow-lg mb-4" />
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
@@ -780,11 +892,11 @@ const ProjectsSection: React.FC<{
     <div>
       <SectionTitle>{translations.projectsTitle}</SectionTitle>
       
-      <div className="grid md:grid-cols-2 gap-6">
+      <motion.div className="grid md:grid-cols-2 gap-6" initial="hidden" animate="visible" variants={staggerGrid}>
         {projects.map((project, index) => (
-          <div key={index} className="relative group cursor-pointer" onMouseEnter={() => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
-            <div className={`relative bg-gradient-to-br ${project.gradient} rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl`}>
-              
+          <motion.div key={index} variants={fadeUp} className="relative group cursor-pointer h-full" onMouseEnter={() => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
+            <div className={`relative bg-gradient-to-br ${project.gradient} rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl h-full flex flex-col`}>
+
               <div className="absolute top-4 right-4 z-20">
                 <span className="bg-white/20 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full border border-white/30">
                   {project.category}
@@ -797,12 +909,12 @@ const ProjectsSection: React.FC<{
                 </div>
               </div>
 
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-48 overflow-hidden flex-shrink-0">
                 <RotatingImage project={project} alt={`Preview de ${project.name}`} paused={hoveredIndex === index} />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
               </div>
 
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-1">
                 <div className="mb-4">
                   <h3 className="text-2xl font-bold text-white mb-2">{project.name}</h3>
                   <p className="text-white/90 text-sm leading-relaxed">
@@ -813,7 +925,7 @@ const ProjectsSection: React.FC<{
                 <div className="mb-4">
                   <div className="flex flex-wrap gap-2">
                     {project.getTechStack().map((tech, techIndex) => (
-                      <span 
+                      <span
                         key={techIndex}
                         className="text-xs bg-white/10 text-white px-3 py-1 rounded-full border border-white/20"
                       >
@@ -823,30 +935,45 @@ const ProjectsSection: React.FC<{
                   </div>
                 </div>
 
-                <div className="flex gap-3">
-                  <button 
-                    onClick={() => openProjectDetails(project)} 
+                <div className="flex gap-3 mt-auto">
+                  <button
+                    onClick={() => openProjectDetails(project)}
                     className="flex-1 bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm py-3 px-4 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-105 font-medium"
                   >
                     {lang === "es" ? "Ver más" : "View more"}
                   </button>
-                  <a 
-                    href={project.url} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="flex-1 bg-white text-teal-700 text-sm py-3 px-4 rounded-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 text-center font-medium"
-                  >
-                    {translations.openProject}
-                  </a>
+                  <div className="flex flex-col gap-2">
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="bg-white text-teal-700 text-sm py-2 px-4 rounded-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 text-center font-medium"
+                    >
+                      {translations.openProject}
+                    </a>
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm py-2 px-4 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-105 text-center font-medium flex items-center justify-center gap-1.5"
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                          <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
+                        </svg>
+                        GitHub
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
 
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
               <div className="absolute -bottom-16 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <Modal open={Boolean(selectedProject)} onClose={closeProjectDetails}>
         {selectedProject && (
@@ -908,7 +1035,7 @@ const ProjectsSection: React.FC<{
               )}
 
               <div className="pt-4 border-t border-gray-700 text-center">
-                <a href={selectedProject.url} target="_blank" rel="noreferrer" className="inline-block px-6 py-3 border border-blue-500/50 rounded bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
+                <a href={selectedProject.url} target="_blank" rel="noreferrer" className="inline-block px-6 py-3 border border-cyberaccent/50 rounded bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
                   {lang === "es" ? "🚀 Visitar proyecto" : "🚀 Visit project"}
                 </a>
               </div>
@@ -942,38 +1069,38 @@ const TechnologiesSection: React.FC<{
   return (
     <div>
       <SectionTitle>{translations.techTitle}</SectionTitle>
-      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        <div>
-          <div className="mb-6 text-lg font-semibold text-blue-300 text-center">{translations.mastered}</div>
-          <div className="flex flex-wrap gap-4 justify-center">
+      <motion.div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.08 } } }}>
+        <motion.div variants={fadeUp}>
+          <div className="mb-6 text-lg font-semibold text-cyberaccent text-center">{translations.mastered}</div>
+          <motion.div className="flex flex-wrap gap-4 justify-center" initial="hidden" animate="visible" variants={staggerPills}>
             {masteredTechs.map((tech) => (
-              <TechPill 
-                key={tech.name} 
-                name={tech.name} 
-                logo={tech.logo} 
-                variant="ok" 
-                hasDetail={tech.hasDetail} 
-                onClick={() => tech.hasDetail && openTechDetails(tech.name)} 
+              <TechPill
+                key={tech.name}
+                name={tech.name}
+                logo={tech.logo}
+                variant="ok"
+                hasDetail={tech.hasDetail}
+                onClick={() => tech.hasDetail && openTechDetails(tech.name)}
               />
             ))}
-          </div>
-        </div>
-        <div>
+          </motion.div>
+        </motion.div>
+        <motion.div variants={fadeUp}>
           <div className="mb-6 text-lg font-semibold text-orange-300 text-center">{translations.learning}</div>
-          <div className="flex flex-wrap gap-4 justify-center">
+          <motion.div className="flex flex-wrap gap-4 justify-center" initial="hidden" animate="visible" variants={staggerPills}>
             {learningTechs.map((tech) => (
-              <TechPill 
-                key={tech.name} 
-                name={tech.name} 
-                logo={tech.logo} 
-                variant="learn" 
-                hasDetail={tech.hasDetail} 
-                onClick={() => tech.hasDetail && openTechDetails(tech.name)} 
+              <TechPill
+                key={tech.name}
+                name={tech.name}
+                logo={tech.logo}
+                variant="learn"
+                hasDetail={tech.hasDetail}
+                onClick={() => tech.hasDetail && openTechDetails(tech.name)}
               />
             ))}
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
       <Modal open={Boolean(selectedTech)} onClose={closeTechDetails}>
         {selectedTech && (
@@ -993,7 +1120,7 @@ const TechnologiesSection: React.FC<{
 
               <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-2">{lang === "es" ? "Dónde aprendí" : "Where I learned"}</h3>
-                <div className="text-sm bg-blue-900 bg-opacity-30 px-3 py-2 rounded border border-blue-600 inline-block text-blue-200">
+                <div className="text-sm bg-cyberaccent/10 px-3 py-2 rounded border border-cyberaccent/30 inline-block text-cyberaccent">
                   🎓 {selectedTech.learningSource[lang]}
                 </div>
               </div>
@@ -1035,16 +1162,16 @@ const ContactSection: React.FC<{
     <div>
       <SectionTitle>{translations.contact}</SectionTitle>
 
-      <div className="max-w-2xl mx-auto space-y-4">
+      <motion.div className="max-w-2xl mx-auto space-y-4" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.12 } } }}>
 
-        <div className="flex items-center justify-center gap-2">
+        <motion.div variants={fadeUp} className="flex items-center justify-center gap-2">
           <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_6px_2px_rgba(74,222,128,0.5)] animate-pulse"></span>
           <span className="text-sm text-green-300 font-medium">
             {lang === "es" ? "Disponible para oportunidades remotas" : "Available for remote opportunities"}
           </span>
-        </div>
+        </motion.div>
 
-        <div className="p-6 border border-blue-500/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-5">
+        <motion.div variants={fadeUp} className="p-6 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-5">
           <div>
             <p className="text-sm text-gray-300 leading-relaxed text-center">
               {lang === "es"
@@ -1058,7 +1185,7 @@ const ContactSection: React.FC<{
               href={`https://mail.google.com/mail/?view=cm&fs=1&to=${AppConfig.EMAIL}`}
               target="_blank"
               rel="noreferrer"
-              className="px-4 py-2 text-sm border border-blue-500/50 rounded bg-blue-600/20 hover:bg-blue-600/40 transition-colors"
+              className="px-4 py-2 text-sm border border-cyberaccent/50 rounded bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
             >
               {translations.sendEmail}
             </a>
@@ -1073,7 +1200,7 @@ const ContactSection: React.FC<{
           <div className="pt-4 border-t border-gray-700 flex gap-3 justify-center">
             <button
               onClick={AppConfig.openLinkedIn}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm border border-blue-500/50 rounded bg-blue-600/20 hover:bg-blue-600/40 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm border border-cyberaccent/50 rounded bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                 <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.93v5.68H9.35V9h3.42v1.56h.05c.48-.91 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51v6.23zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.13 20.45H3.55V9h3.58v11.45z" />
@@ -1090,9 +1217,9 @@ const ContactSection: React.FC<{
               GitHub
             </button>
           </div>
-        </div>
+        </motion.div>
 
-      </div>
+      </motion.div>
     </div>
   );
 };
@@ -1101,24 +1228,24 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
   return (
     <div>
       <SectionTitle>{translations.learnMore}</SectionTitle>
-      <div className="max-w-3xl mx-auto space-y-4">
+      <motion.div className="max-w-3xl mx-auto space-y-4" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3">
+        <motion.div variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }} className="grid grid-cols-3 gap-3">
           {[
             { value: "3", label: lang === "es" ? "Proyectos" : "Projects" },
             { value: "+3.000", label: lang === "es" ? "Usuarios" : "Users" },
             { value: "UTN", label: lang === "es" ? "Ing. en Sistemas" : "Systems Eng." },
           ].map(({ value, label }) => (
-            <div key={label} className="p-4 border border-blue-500/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
-              <div className="text-2xl font-bold text-blue-300">{value}</div>
+            <motion.div variants={fadeUp} key={label} className="p-4 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
+              <div className="text-2xl font-bold text-amber-400">{value}</div>
               <div className="text-xs text-gray-400 mt-1">{label}</div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Descripción */}
-        <div className="p-6 border border-blue-500/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-4">
+        <motion.div variants={fadeUp} className="p-6 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-4">
           <p className="text-sm text-gray-300 leading-relaxed">
             {lang === "es"
               ? "Estudiante de Ingeniería en Sistemas en la UTN, con foco en automatización, integración de APIs e interfaces web. Me interesa el desarrollo de herramientas que resuelvan problemas reales de forma eficiente."
@@ -1126,13 +1253,6 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
           </p>
 
           <div className="pt-3 border-t border-gray-700 flex flex-wrap gap-3 justify-center">
-            <a
-              href={AppConfig.CV_PATH}
-              download
-              className="inline-block px-6 py-2.5 text-sm border border-blue-500/50 rounded bg-blue-600/20 hover:bg-blue-600/40 transition-colors"
-            >
-              {translations.downloadCV}
-            </a>
             <button
               onClick={AppConfig.openGitHub}
               className="inline-flex items-center gap-2 px-5 py-2.5 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
@@ -1143,9 +1263,9 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
               GitHub
             </button>
           </div>
-        </div>
+        </motion.div>
 
-      </div>
+      </motion.div>
     </div>
   );
 };
@@ -1157,18 +1277,28 @@ const Sidebar: React.FC<{
   onMenuClick: (index: number) => void;
   onLanguageToggle: () => void;
   onCopyEmail: () => void;
-}> = ({ translations, lang, activeIndex, onMenuClick, onLanguageToggle, onCopyEmail }) => (
-  <aside className="w-72 p-4 border-r border-blue-500/30 hidden md:flex flex-col gap-6 bg-black/20 backdrop-blur-sm">
-    <div className="flex items-center gap-3">
-      <div className="text-lg font-semibold text-blue-400 leading-4 overflow-hidden whitespace-nowrap">
+  theme: Theme;
+  onThemeToggle: () => void;
+}> = ({ translations, lang, activeIndex, onMenuClick, onLanguageToggle, onCopyEmail, theme, onThemeToggle }) => (
+  <aside className="w-72 p-4 border-r border-cyberaccent/30 hidden md:flex flex-col gap-6 bg-black/20 backdrop-blur-sm relative z-[1]">
+    <div className="flex items-center gap-2">
+      <div className="text-lg font-semibold text-cyberaccent leading-4 overflow-hidden whitespace-nowrap">
         {lang === "es" ? "Portafolio" : "Portfolio"}
       </div>
       <button
         aria-label="toggle-language"
-        className="ml-auto px-2 py-1 border border-blue-500/50 rounded text-xs hover:bg-blue-500/20 transition-colors"
+        className="ml-auto px-2 py-1 border border-cyberaccent/50 rounded text-xs hover:bg-cyberaccent/20 transition-colors"
         onClick={onLanguageToggle}
       >
         {lang === "es" ? "EN" : "ES"}
+      </button>
+      <button
+        aria-label="toggle-theme"
+        className="px-2 py-1 border border-cyberaccent/50 rounded text-xs hover:bg-cyberaccent/20 transition-colors"
+        onClick={onThemeToggle}
+        title={theme === 'dark' ? 'Modo PS3' : 'Modo oscuro'}
+      >
+        {theme === 'dark' ? 'PS3' : 'Dark'}
       </button>
     </div>
 
@@ -1179,12 +1309,12 @@ const Sidebar: React.FC<{
           onClick={() => onMenuClick(i)}
           className={`w-full text-left p-3 my-2 rounded transition-all relative ${
             i === activeIndex 
-              ? "bg-blue-500/10 text-blue-300" 
-              : "hover:bg-blue-500/10 hover:text-blue-200"
+              ? "bg-cyberaccent/10 text-cyberaccent" 
+              : "hover:bg-cyberaccent/10 hover:text-blue-200"
           }`}
         >
           {i === activeIndex && (
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-6 bg-blue-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-6 bg-cyberaccent rounded-full shadow-[0_0_8px_rgba(14,165,255,0.6)]"></div>
           )}
           <div className="text-[11px] opacity-80 ml-2">
             {i + 1}. {label}
@@ -1194,15 +1324,15 @@ const Sidebar: React.FC<{
     </nav>
 
     <div className="flex flex-col gap-2">
-      <a 
-        href={AppConfig.CV_PATH} 
-        download 
-        className="px-3 py-2 text-xs border border-blue-500/50 rounded text-center hover:bg-blue-500/20 transition-colors"
+      <a
+        href={AppConfig.CV_PATH}
+        download
+        className="px-3 py-2 text-xs border border-cyberaccent/50 rounded text-center hover:bg-cyberaccent/20 transition-colors"
       >
         {translations.downloadCV}
       </a>
-      <button 
-        onClick={onCopyEmail} 
+      <button
+        onClick={onCopyEmail}
         className="px-3 py-2 text-xs border border-gray-500/50 rounded hover:bg-gray-500/20 transition-colors"
       >
         {translations.copyEmail}
@@ -1237,7 +1367,7 @@ const ContentRenderer: React.FC<{
 };
 
 const Footer: React.FC = () => (
-  <footer className="mt-auto p-4 border-t border-blue-500/30 bg-black/20 backdrop-blur-sm">
+  <footer className="mt-auto p-4 border-t border-cyberaccent/30 bg-black/20 backdrop-blur-sm">
     <div className="text-center text-xs opacity-60">
       © 2026 Isaac José García Márquez - Todos los derechos reservados
     </div>
@@ -1247,11 +1377,68 @@ const Footer: React.FC = () => (
 // ========================= COMPONENTE PRINCIPAL =========================
 
 export default function OptimizedPortfolio(): JSX.Element {
-  const { activeIndex, setActive } = useNavigation();
+  const { activeIndex, setActive, next, previous } = useNavigation();
   const { lang, translations, toggleLanguage } = useTranslations();
   const reducedMotion = usePrefersReducedMotion();
-  const { toast, ToastNode } = useToast();
-  
+  const [theme, setTheme] = useState<Theme>('ps3');
+  const toggleTheme = useCallback(() => setTheme(t => t === 'dark' ? 'ps3' : 'dark'), []);
+  const { toast, ToastNode } = useToast(theme);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollOverflow = useRef(0);
+  const scrollCooldown = useRef(0);
+
+  // Resetea el scroll al tope cuando cambia de sección
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+    scrollOverflow.current = 0;
+  }, [activeIndex]);
+
+  // Navega a la siguiente/anterior sección al llegar a los límites del scroll
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      const now = Date.now();
+      if (now - scrollCooldown.current < 900) {
+        scrollOverflow.current = 0;
+        return;
+      }
+
+      const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 2;
+      const atTop = el.scrollTop <= 0;
+
+      if (atBottom && e.deltaY > 0) {
+        scrollOverflow.current += e.deltaY;
+      } else if (atTop && e.deltaY < 0) {
+        scrollOverflow.current += e.deltaY;
+      } else {
+        scrollOverflow.current = 0;
+        return;
+      }
+
+      if (scrollOverflow.current > 220) {
+        scrollOverflow.current = 0;
+        scrollCooldown.current = now;
+        next();
+      } else if (scrollOverflow.current < -220) {
+        scrollOverflow.current = 0;
+        scrollCooldown.current = now;
+        previous();
+      }
+    };
+
+    el.addEventListener('wheel', handleWheel, { passive: true });
+    return () => el.removeEventListener('wheel', handleWheel);
+  }, [next, previous]);
+
   // Repositorios
   const [projectRepo] = useState(() => new ProjectRepository());
   const [techRepo] = useState(() => new TechnologyRepository());
@@ -1296,19 +1483,37 @@ export default function OptimizedPortfolio(): JSX.Element {
   }, [translations, toast]);
 
   return (
-    <div className="min-h-screen flex relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
+    <div
+      data-theme={theme}
+      style={theme === 'ps3' ? { background: 'linear-gradient(160deg, #c0d8f2 0%, #b2cae6 22%, #c5dcf5 55%, #d2e8ff 100%)' } : undefined}
+      className={`min-h-screen flex relative ${theme === 'dark' ? 'bg-gradient-to-br from-[#060714] via-[#071028] to-[#060714] text-white' : 'text-[#0c1e42]'}`}
+    >
+      <PS3Ribbons theme={theme} />
+
       {/* Sidebar */}
-      <Sidebar 
+      <Sidebar
         translations={translations}
-        
+        lang={lang}
+        activeIndex={activeIndex}
         onMenuClick={setActive}
         onLanguageToggle={toggleLanguage}
         onCopyEmail={copyEmail}
+        theme={theme}
+        onThemeToggle={toggleTheme}
       />
 
+      {/* Mobile theme toggle */}
+      <button
+        aria-label="toggle-theme"
+        onClick={toggleTheme}
+        className="fixed top-3 right-3 z-10 md:hidden px-2 py-1 border border-cyberaccent/50 rounded text-xs bg-black/20 hover:bg-cyberaccent/20 transition-colors backdrop-blur-sm"
+      >
+        {theme === 'dark' ? 'PS3' : 'Dark'}
+      </button>
+
       {/* Main Content */}
-      <main className="flex-1 flex flex-col">
-        <div className="flex-1 p-6 overflow-auto">
+      <main className="flex-1 flex flex-col relative z-[1]">
+        <div ref={scrollContainerRef} className="flex-1 p-6 overflow-y-auto overflow-x-hidden">
           <AnimatePresence mode="wait">
             <motion.section 
               key={`${activeIndex}-${lang}`} 

@@ -435,3 +435,137 @@ h1, h2, h3, h4, h5, h6 {
    - Reemplaza clases existentes por .glass, .card-hover, .tech-card, .menu-item-active
    - Si usas Tailwind + React: combina estas clases con las utilidades de Tailwind para consistencia.
    ========================= */
+
+/* ===================================
+   PS3 XMB Light Theme
+   =================================== */
+
+/* Override body background for PS3 mode */
+html[data-theme="ps3"] body {
+  background: linear-gradient(160deg, #c0d8f2 0%, #b2cae6 22%, #c5dcf5 55%, #d2e8ff 100%) !important;
+  color: #0c1e42;
+}
+
+/* CSS variable overrides */
+[data-theme="ps3"] {
+  --text-main: #1a3a6b;
+  --muted: rgba(38, 80, 155, 0.80);
+  --accent-blue: #0055cc;
+  --card-border: rgba(0, 80, 200, 0.18);
+  --panel: rgba(255, 255, 255, 0.42);
+}
+
+/* ---- Text ---- */
+/* Keep white text inside colored gradient cards (project cards) */
+[data-theme="ps3"] .bg-gradient-to-br .text-white,
+[data-theme="ps3"] .bg-gradient-to-br .text-white\/90 { color: #ffffff !important; }
+
+[data-theme="ps3"] .text-white { color: #1a3a6b !important; }
+[data-theme="ps3"] .text-gray-200 { color: rgba(26,58,107,0.9) !important; }
+[data-theme="ps3"] .text-gray-300 { color: rgba(38,76,140,0.85) !important; }
+[data-theme="ps3"] .text-gray-400 { color: rgba(55,100,175,0.78) !important; }
+[data-theme="ps3"] .text-cyberaccent { color: #0055cc !important; }
+[data-theme="ps3"] .text-cyan-400 { color: #0055cc !important; }
+[data-theme="ps3"] .text-orange-300 { color: #2255b8 !important; }
+[data-theme="ps3"] .text-amber-400 { color: #1a4db3 !important; }
+[data-theme="ps3"] .text-yellow-400 { color: #0044cc !important; }
+[data-theme="ps3"] .text-green-400 { color: #007700 !important; }
+[data-theme="ps3"] .text-green-300 { color: #008800 !important; }
+[data-theme="ps3"] .text-blue-200 { color: #1a4db3 !important; }
+[data-theme="ps3"] .opacity-60 { opacity: 0.65 !important; }
+[data-theme="ps3"] .opacity-80 { opacity: 0.82 !important; }
+
+/* ---- Backgrounds ---- */
+[data-theme="ps3"] .bg-black\/20 { background-color: rgba(255,255,255,0.44) !important; }
+[data-theme="ps3"] .bg-black\/30 { background-color: rgba(255,255,255,0.50) !important; }
+[data-theme="ps3"] .bg-black\/75 { background-color: rgba(180,210,245,0.82) !important; }
+[data-theme="ps3"] .bg-gray-900 { background-color: rgba(228,240,255,0.97) !important; }
+[data-theme="ps3"] .bg-gray-800 { background-color: rgba(210,228,252,0.9) !important; }
+[data-theme="ps3"] .bg-cyberaccent\/20 { background-color: rgba(0,85,200,0.12) !important; }
+[data-theme="ps3"] .bg-cyberaccent\/10 { background-color: rgba(0,85,200,0.08) !important; }
+[data-theme="ps3"] .bg-gray-700\/30 { background-color: rgba(200,220,252,0.4) !important; }
+[data-theme="ps3"] .bg-green-500\/10 { background-color: rgba(0,140,50,0.07) !important; }
+[data-theme="ps3"] .bg-orange-500\/10 { background-color: rgba(0,80,200,0.07) !important; }
+[data-theme="ps3"] .bg-cyberaccent { background-color: #0055cc !important; }
+
+/* ---- Hover backgrounds ---- */
+[data-theme="ps3"] .hover\:bg-cyberaccent\/30:hover { background-color: rgba(0,85,200,0.18) !important; }
+[data-theme="ps3"] .hover\:bg-cyberaccent\/20:hover { background-color: rgba(0,85,200,0.12) !important; }
+[data-theme="ps3"] .hover\:bg-gray-700\/50:hover { background-color: rgba(200,220,252,0.55) !important; }
+[data-theme="ps3"] .hover\:bg-gray-500\/20:hover { background-color: rgba(180,210,245,0.35) !important; }
+[data-theme="ps3"] .hover\:bg-gray-600\/20:hover { background-color: rgba(180,210,245,0.3) !important; }
+[data-theme="ps3"] .hover\:bg-green-500\/20:hover { background-color: rgba(0,140,50,0.12) !important; }
+[data-theme="ps3"] .hover\:bg-orange-500\/20:hover { background-color: rgba(0,80,200,0.12) !important; }
+
+/* ---- Borders ---- */
+[data-theme="ps3"] .border-cyberaccent\/30 { border-color: rgba(0,80,200,0.28) !important; }
+[data-theme="ps3"] .border-cyberaccent\/50 { border-color: rgba(0,80,200,0.45) !important; }
+[data-theme="ps3"] .border-gray-700 { border-color: rgba(150,195,245,0.5) !important; }
+[data-theme="ps3"] .border-gray-500\/50 { border-color: rgba(100,155,215,0.4) !important; }
+[data-theme="ps3"] .border-gray-600 { border-color: rgba(150,195,245,0.45) !important; }
+[data-theme="ps3"] .border-green-500\/30 { border-color: rgba(0,140,50,0.25) !important; }
+[data-theme="ps3"] .border-orange-500\/30 { border-color: rgba(0,80,200,0.25) !important; }
+[data-theme="ps3"] .hover\:border-green-400\/50:hover { border-color: rgba(0,140,50,0.42) !important; }
+[data-theme="ps3"] .hover\:border-orange-400\/50:hover { border-color: rgba(0,80,200,0.42) !important; }
+
+/* ---- Gradients ---- */
+[data-theme="ps3"] .from-cyberaccent { --tw-gradient-from: #0055cc !important; }
+[data-theme="ps3"] .to-neondanger { --tw-gradient-to: #003fa8 !important; }
+
+/* ---- Modal backdrop ---- */
+.modal-backdrop {
+  background: rgba(0,0,0,0.75);
+}
+[data-theme="ps3"] .modal-backdrop {
+  background: rgba(70,120,200,0.65) !important;
+}
+
+/* ---- Scrollbar in PS3 ---- */
+html[data-theme="ps3"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(0,80,200,0.2), rgba(0,80,200,0.1));
+}
+html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
+
+/* ---- Focus ring ---- */
+[data-theme="ps3"] :focus-visible {
+  outline-color: rgba(0,85,200,0.3);
+}
+
+/* ---- Extra context-aware overrides ---- */
+
+/* Modal header text and body text */
+[data-theme="ps3"] .bg-gray-900 h2,
+[data-theme="ps3"] .bg-gray-900 h3 {
+  color: #1a3a6b !important;
+}
+
+/* Gradient visit-project button stays readable */
+[data-theme="ps3"] .from-blue-600.to-purple-600 {
+  color: #ffffff !important;
+}
+[data-theme="ps3"] a.from-blue-600,
+[data-theme="ps3"] .bg-gradient-to-r .text-teal-700 { color: inherit !important; }
+
+/* Project category badge (has bg-white/20 + text-white): keep white */
+[data-theme="ps3"] .bg-white\/20.text-white,
+[data-theme="ps3"] .bg-white\/20 { color: #ffffff !important; }
+
+/* Tech pill label text (inherits body, make it clearly blue) */
+[data-theme="ps3"] .min-w-\[120px\] span { color: #1a3a6b !important; }
+
+/* Footer text */
+[data-theme="ps3"] footer { color: rgba(38,76,140,0.7) !important; }
+
+/* Nav sidebar labels */
+[data-theme="ps3"] nav button { color: #2255b0 !important; }
+[data-theme="ps3"] nav button.text-cyberaccent,
+[data-theme="ps3"] nav button .text-cyberaccent { color: #0055cc !important; }
+
+/* Sidebar title / brand */
+[data-theme="ps3"] aside .text-lg { color: #0055cc !important; }
+
+/* "Available for opportunities" green dot text */
+[data-theme="ps3"] .text-green-300.font-medium { color: #007700 !important; }
+
+/* Mobile toggle button */
+[data-theme="ps3"] button.fixed { color: #1a3a6b !important; }
