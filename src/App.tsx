@@ -33,6 +33,7 @@ menu: readonly string[];  aboutTitle: string;
   openProject: string;
   mastered: string;
   learning: string;
+  tools: string;
   bio: string;
   emailCopied: string;
   copyManual: string;
@@ -83,6 +84,7 @@ class TranslationManager {
       openProject: "Abrir",
       mastered: "Manejo",
       learning: "Aprendiendo",
+      tools: "Herramientas",
       bio: "Soy Isaac José García Márquez, un desarrollador apasionado por la tecnología y la programación. Me especializo en desarrollo web y análisis de datos, siempre buscando aprender nuevas tecnologías y mejorar mis habilidades.",
       emailCopied: "Email copiado",
       copyManual: "Copia manual",
@@ -113,6 +115,7 @@ class TranslationManager {
       openProject: "Open",
       mastered: "Mastered",
       learning: "Learning",
+      tools: "Tools",
       bio: "I'm Isaac José García Márquez, a developer passionate about technology and programming. I specialize in web development and data analysis, always looking to learn new technologies and improve my skills.",
       emailCopied: "Email copied",
       copyManual: "Copy manually",
@@ -352,7 +355,7 @@ class Technology {
   constructor(
     public readonly name: string,
     public readonly logo: string,
-    public readonly status: 'mastered' | 'learning',
+    public readonly status: 'mastered' | 'learning' | 'tool',
     public readonly hasDetail: boolean = false,
     public readonly detail?: TechDetail,
     public readonly tooltip?: { es: string; en: string }
@@ -417,7 +420,22 @@ class TechnologyRepository {
         { es: "Entorno de ejecución de JavaScript del lado del servidor.", en: "JavaScript runtime environment for the server side." }),
     ];
 
-    this.technologies = [...masteredTechs, ...learningTechs];
+    const toolTechs = [
+      new Technology("VS Code", "/logos/vscode.svg", "tool", false, undefined,
+        { es: "Editor principal para todo el desarrollo.", en: "Main editor for all development." }),
+      new Technology("GitHub", "/logos/github.svg", "tool", false, undefined,
+        { es: "Control de versiones y hosting de repositorios.", en: "Version control and repository hosting." }),
+      new Technology("Claude Code", "/logos/claude-code.svg", "tool", false, undefined,
+        { es: "IA para desarrollo: debugging, refactoring y arquitectura.", en: "AI for development: debugging, refactoring and architecture." }),
+      new Technology("Figma", "/logos/figma.svg", "tool", false, undefined,
+        { es: "Diseño de interfaces y prototipos.", en: "Interface design and prototyping." }),
+      new Technology("Vercel", "/logos/vercel.svg", "tool", false, undefined,
+        { es: "Deploy y hosting de proyectos web.", en: "Web project deployment and hosting." }),
+      new Technology("Linux", "/logos/linux.svg", "tool", false, undefined,
+        { es: "Entorno de trabajo principal para desarrollo y servidores.", en: "Main working environment for development and servers." }),
+    ];
+
+    this.technologies = [...masteredTechs, ...learningTechs, ...toolTechs];
   }
 
   getMasteredTechnologies(): Technology[] {
@@ -426,6 +444,10 @@ class TechnologyRepository {
 
   getLearningTechnologies(): Technology[] {
     return this.technologies.filter(tech => tech.status === 'learning');
+  }
+
+  getToolTechnologies(): Technology[] {
+    return this.technologies.filter(tech => tech.status === 'tool');
   }
 
   getTechnologyByName(name: string): Technology | undefined {
@@ -777,24 +799,27 @@ const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 type TechPillProps = {
   name: string;
   logo: string;
-  variant?: "ok" | "learn";
+  variant?: "ok" | "learn" | "tool";
   hasDetail?: boolean;
+  shine?: boolean;
   tooltip?: string;
   onClick?: () => void;
 };
 
-const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "ok", hasDetail = false, tooltip, onClick }) => {
+const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "ok", hasDetail = false, shine = false, tooltip, onClick }) => {
   const base = "relative flex flex-col items-center gap-3 p-6 rounded-xl transition-all duration-300 transform hover:scale-105 cursor-pointer min-w-[120px] min-h-[120px] justify-center group";
   const variantClasses =
     variant === "ok"
       ? "bg-green-500/10 border border-green-500/30 hover:bg-green-500/20 hover:border-green-400/50 hover:shadow-lg hover:shadow-green-500/25"
+      : variant === "tool"
+      ? "bg-slate-500/10 border border-slate-400/30 hover:bg-slate-500/20 hover:border-slate-400/50 hover:shadow-lg hover:shadow-slate-500/20"
       : "bg-orange-500/10 border border-orange-500/30 hover:bg-orange-500/20 hover:border-orange-400/50 hover:shadow-lg hover:shadow-orange-500/25";
 
   return (
-    <motion.div variants={popIn} className={`${base} ${variantClasses} ${hasDetail ? "hover:brightness-110" : ""}`} onClick={onClick}>
+    <motion.div variants={popIn} className={`${base} ${variantClasses} ${shine ? "pill-shine" : ""} ${hasDetail ? "hover:brightness-110" : ""}`} onClick={onClick}>
       <img src={logo} alt={name} loading="lazy" decoding="async" className="w-12 h-12 object-contain" />
       <span className="text-sm font-medium text-center">{name}</span>
-      {hasDetail && <span className="text-xs opacity-60">ℹ️ Info</span>}
+      {hasDetail && !shine && <span className="text-xs opacity-60">ℹ️ Info</span>}
       {tooltip && (
         <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-44 px-3 py-2 rounded-lg text-xs leading-snug text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 shadow-lg"
           style={{ background: 'var(--tooltip-bg, #111)', color: 'var(--tooltip-text, #fff)', border: '1px solid rgba(255,255,255,0.12)' }}>
@@ -1003,9 +1028,18 @@ const ProjectsSection = React.memo(({ translations, lang, projectRepo }: {
                       href={project.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="bg-white text-teal-700 text-sm py-2 px-4 rounded-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 text-center font-medium"
+                      className={`text-sm py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 text-center font-medium flex items-center justify-center gap-1.5 ${
+                        project.url.includes("github.com")
+                          ? "bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30"
+                          : "bg-white text-teal-700 hover:bg-gray-100"
+                      }`}
                     >
-                      {translations.openProject}
+                      {project.url.includes("github.com") && (
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                          <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
+                        </svg>
+                      )}
+                      {project.url.includes("github.com") ? "GitHub" : translations.openProject}
                     </a>
                     {project.githubUrl && (
                       <a
@@ -1112,6 +1146,7 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
   
   const masteredTechs = techRepo.getMasteredTechnologies();
   const learningTechs = techRepo.getLearningTechnologies();
+  const toolTechs = techRepo.getToolTechnologies();
 
   const openTechDetails = useCallback((techName: string) => {
     const tech = techRepo.getTechnologyByName(techName);
@@ -1136,6 +1171,7 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
                 logo={tech.logo}
                 variant="ok"
                 hasDetail={tech.hasDetail}
+                shine={tech.name === "Python"}
                 tooltip={tech.tooltip?.[lang]}
                 onClick={() => tech.hasDetail && openTechDetails(tech.name)}
               />
@@ -1157,6 +1193,22 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
               />
             ))}
           </motion.div>
+        </motion.div>
+      </motion.div>
+
+      <motion.div className="mt-10 max-w-4xl mx-auto" initial="hidden" animate="visible" variants={fadeUp}>
+        <div className="mb-6 text-lg font-semibold text-purple-300 text-center">{translations.tools}</div>
+        <motion.div className="flex flex-wrap gap-4 justify-center" initial="hidden" animate="visible" variants={staggerPills}>
+          {toolTechs.map((tech) => (
+            <TechPill
+              key={tech.name}
+              name={tech.name}
+              logo={tech.logo}
+              variant="tool"
+              hasDetail={false}
+              tooltip={tech.tooltip?.[lang]}
+            />
+          ))}
         </motion.div>
       </motion.div>
 
@@ -1320,12 +1372,6 @@ const ContactSection: React.FC<{
         {/* Links directos */}
         <motion.div variants={fadeUp} className="flex gap-3 justify-center flex-wrap">
           <button
-            onClick={onCopyEmail}
-            className="px-4 py-2 text-sm border border-gray-500/50 rounded hover:bg-gray-600/20 transition-colors"
-          >
-            {translations.copyEmail}
-          </button>
-          <button
             onClick={AppConfig.openLinkedIn}
             className="btn-shine inline-flex items-center gap-2 px-4 py-2 text-sm border border-cyberaccent/50 rounded bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
           >
@@ -1380,16 +1426,19 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
               : "Systems Engineering student at UTN, focused on automation, API integration and web interfaces. I'm interested in building tools that solve real problems efficiently."}
           </p>
 
-          <div className="pt-3 border-t border-gray-700 flex flex-wrap gap-3 justify-center">
-            <button
-              onClick={AppConfig.openGitHub}
+          <div className="pt-3 border-t border-gray-700 flex flex-col items-center gap-2">
+            <span className="text-xs text-gray-400">{lang === "es" ? "Repositorio del portfolio" : "Portfolio repository"}</span>
+            <a
+              href="https://github.com/Isaacxiddd/isaac-portfolio"
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-shine inline-flex items-center gap-2 px-5 py-2.5 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                 <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
               </svg>
               GitHub
-            </button>
+            </a>
           </div>
         </motion.div>
 
@@ -1458,7 +1507,7 @@ const Sidebar: React.FC<{
       <a
         href={lang === 'en' ? AppConfig.CV_PATH_EN : AppConfig.CV_PATH}
         download
-        className="btn-shine btn-star px-3 py-2 text-xs border border-cyberaccent/50 rounded text-center hover:bg-cyberaccent/20 transition-colors"
+        className="btn-shine px-3 py-2 text-xs border border-cyberaccent/50 rounded text-center hover:bg-cyberaccent/20 transition-colors"
       >
         {translations.downloadCV}
       </a>

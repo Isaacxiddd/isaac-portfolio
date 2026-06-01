@@ -604,6 +604,37 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
   transition: left 0.5s ease;
 }
 
+/* ========================= PILL SHINE (loop) ========================= */
+@keyframes pill-shine-move {
+  0%   { left: -75%; }
+  100% { left: 130%; }
+}
+
+.pill-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.pill-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.55) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+  z-index: 10;
+  animation: pill-shine-move 2.8s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
 /* ========================= STARBURST EFFECT ========================= */
 .btn-star {
   position: relative;
