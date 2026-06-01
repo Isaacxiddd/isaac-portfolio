@@ -428,8 +428,8 @@ class TechnologyRepository {
  */
 class AppConfig {
   static readonly EMAIL = "isaacjosegarciamarquez@gmail.com";
-  static readonly CV_PATH = "/Curriculum_Vitae_Isaac_Jose_Garcia_Marquez.pdf";
-  static readonly CV_PATH_EN = "/Curriculum_Vitae_Isaac_Jose_Garcia_Marquez_EN.pdf";
+  static readonly CV_PATH = "/CV_Isaac_Garcia_ES.pdf";
+  static readonly CV_PATH_EN = "/CV_Isaac_Garcia_EN.pdf";
   static readonly WEB3FORMS_KEY = "4c48c221-ed24-4287-8176-7ba45ff628bc";
   static readonly MENU_KEYS = ["about", "projects", "tech", "contact", "learn"] as const;
   static readonly GITHUB_URL = "https://github.com/isaacxiddd";
