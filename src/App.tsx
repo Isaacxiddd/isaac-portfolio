@@ -430,7 +430,7 @@ class AppConfig {
   static readonly EMAIL = "isaacjosegarciamarquez@gmail.com";
   static readonly CV_PATH = "/Curriculum_Vitae_Isaac_Jose_Garcia_Marquez.pdf";
   static readonly CV_PATH_EN = "/Curriculum_Vitae_Isaac_Jose_Garcia_Marquez_EN.pdf";
-  static readonly WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+  static readonly WEB3FORMS_KEY = "4c48c221-ed24-4287-8176-7ba45ff628bc";
   static readonly MENU_KEYS = ["about", "projects", "tech", "contact", "learn"] as const;
   static readonly GITHUB_URL = "https://github.com/isaacxiddd";
   static readonly LINKEDIN_URL = "https://www.linkedin.com/in/isaacjosegarcia";
@@ -1390,7 +1390,7 @@ const Sidebar: React.FC<{
         className="ml-auto px-2 py-1 border border-cyberaccent/50 rounded text-xs hover:bg-cyberaccent/20 transition-colors"
         onClick={onLanguageToggle}
       >
-        {lang === "es" ? "EN" : "ES"}
+        {lang === "es" ? "ES" : "EN"}
       </button>
       <button
         aria-label="toggle-theme"
@@ -1399,8 +1399,8 @@ const Sidebar: React.FC<{
         title={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
       >
         {theme === 'dark'
-          ? <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2a8 8 0 0 1 0 16A8 8 0 0 1 12 4zm0 1a7 7 0 1 0 0 14A7 7 0 0 0 12 5zm0 1.5A5.5 5.5 0 1 1 12 17 5.5 5.5 0 0 1 12 6.5z" /><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" strokeWidth="2"/><line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" strokeWidth="2"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" strokeWidth="2"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" strokeWidth="2"/><line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" strokeWidth="2"/><line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="2"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" strokeWidth="2"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" strokeWidth="2"/></svg>
-          : <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          ? <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          : <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" strokeWidth="2"/><line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" strokeWidth="2"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" strokeWidth="2"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" strokeWidth="2"/><line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" strokeWidth="2"/><line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="2"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" strokeWidth="2"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" strokeWidth="2"/></svg>
         }
       </button>
     </div>
@@ -1612,8 +1612,8 @@ export default function OptimizedPortfolio(): JSX.Element {
         className="fixed top-3 right-3 z-10 md:hidden p-2 border border-cyberaccent/50 rounded bg-black/20 hover:bg-cyberaccent/20 transition-colors backdrop-blur-sm"
       >
         {theme === 'dark'
-          ? <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" strokeWidth="2"/><line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" strokeWidth="2"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" strokeWidth="2"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" strokeWidth="2"/><line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" strokeWidth="2"/><line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="2"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" strokeWidth="2"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" strokeWidth="2"/></svg>
-          : <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          ? <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          : <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" strokeWidth="2"/><line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" strokeWidth="2"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" strokeWidth="2"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" strokeWidth="2"/><line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" strokeWidth="2"/><line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="2"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" strokeWidth="2"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" strokeWidth="2"/></svg>
         }
       </button>
 
