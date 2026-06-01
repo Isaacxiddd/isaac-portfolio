@@ -58,6 +58,7 @@ interface TechDetail {
   learningSource: { es: string; en: string };
   skills: { es: string[]; en: string[] };
   certificate?: string;
+  challenge?: { es: string; en: string };
 }
 
 // ========================= CLASES DE DOMINIO =========================
@@ -385,42 +386,182 @@ class TechnologyRepository {
       name: "Python",
       logo: "/logos/python.png",
       description: {
-        es: "Formación en Python orientada al análisis de datos, visualización y procesamiento de información. Experiencia trabajando con Pandas y Matplotlib para transformar datos en información útil.",
-        en: "Python training focused on data analysis, visualization and information processing. Experience working with Pandas and Matplotlib to transform data into useful insights."
+        es: "Análisis de datos, visualización y procesamiento de información con Pandas y Matplotlib. Formación orientada a transformar datos crudos en información útil.",
+        en: "Data analysis, visualization and information processing with Pandas and Matplotlib. Training focused on transforming raw data into useful insights."
       },
       learningSource: { es: "Curso de la Ciudad", en: "City Course" },
       skills: {
-        es: ["Análisis de datos", "Creación de gráficos", "Pandas", "Matplotlib"],
-        en: ["Data analysis", "Graph creation", "Pandas", "Matplotlib"]
+        es: ["Pandas para análisis de datos", "Matplotlib para visualización", "Scripts de procesamiento", "Automatización de tareas"],
+        en: ["Pandas for data analysis", "Matplotlib for visualization", "Processing scripts", "Task automation"]
       },
       certificate: certificadoImg,
+      challenge: {
+        es: "Limpiar y normalizar datasets con formatos inconsistentes: fechas en múltiples formatos, valores nulos y columnas con nombres distintos según la fuente.",
+        en: "Cleaning and normalizing datasets with inconsistent formats: dates in multiple formats, null values and columns with different names depending on the source."
+      }
+    };
+
+    const jsDetail: TechDetail = {
+      name: "JavaScript",
+      logo: "/logos/javascript.png",
+      description: {
+        es: "Lógica principal en FormulaFacilUTN (gamificación, renderizado con MathJax), automatización de reservas (parsing de emails, transformación de datos para Bitrix24) y HumanoIA (lógica de juego, timer, selección aleatoria).",
+        en: "Core logic in FormulaFacilUTN (gamification, MathJax rendering), reservation automation (email parsing, data transformation for Bitrix24) and HumanoIA (game logic, timer, random selection)."
+      },
+      learningSource: { es: "Proyectos propios: FormulaFacil, Automatización de Reservas, HumanoIA", en: "Own projects: FormulaFacil, Reservation Automation, HumanoIA" },
+      skills: {
+        es: ["Async/await y Promesas", "Regex para parsing de emails", "Array methods (map, filter, reduce)", "Clases ES6", "Manipulación del DOM"],
+        en: ["Async/await and Promises", "Regex for email parsing", "Array methods (map, filter, reduce)", "ES6 classes", "DOM manipulation"]
+      },
+      challenge: {
+        es: "Parsing robusto de emails de Airbnb y Booking: el formato cambia sin aviso. Solución: múltiples patrones regex con fallback secuencial para no perder reservas.",
+        en: "Robust email parsing from Airbnb and Booking: format changes without warning. Solution: multiple regex patterns with sequential fallback to avoid losing reservations."
+      }
+    };
+
+    const gitDetail: TechDetail = {
+      name: "git",
+      logo: "/logos/git.png",
+      description: {
+        es: "Control de versiones en todos mis proyectos. Trabajo con ramas para separar features, commits descriptivos y GitHub como repositorio remoto con deploy automático a Vercel.",
+        en: "Version control across all my projects. Feature branches, descriptive commits and GitHub as remote with automatic deploy to Vercel."
+      },
+      learningSource: { es: "Práctica continua en proyectos propios", en: "Continuous practice in own projects" },
+      skills: {
+        es: ["Branching y merging", "Commits descriptivos", "GitHub como remote", "Integración con Vercel CI/CD", "git stash y rebase básico"],
+        en: ["Branching and merging", "Descriptive commits", "GitHub as remote", "Vercel CI/CD integration", "Basic git stash and rebase"]
+      }
+    };
+
+    const postgresDetail: TechDetail = {
+      name: "PostgreSQL",
+      logo: "/logos/postgresql.svg",
+      description: {
+        es: "Índice anti-duplicados para la automatización de reservas (confirmación única por código) y sincronización ClassTracker ↔ Supabase con timestamps para reconciliación de datos offline.",
+        en: "Anti-duplication index for reservation automation (unique confirmation code) and ClassTracker ↔ Supabase sync with timestamps for offline data reconciliation."
+      },
+      learningSource: { es: "Proyectos: Automatización de Reservas + ClassTracker", en: "Projects: Reservation Automation + ClassTracker" },
+      skills: {
+        es: ["UNIQUE CONSTRAINT para deduplicación", "INSERT ON CONFLICT (upsert)", "Row-Level Security con Supabase", "Timestamps para reconciliación", "Índices para performance"],
+        en: ["UNIQUE CONSTRAINT for deduplication", "INSERT ON CONFLICT (upsert)", "Row-Level Security with Supabase", "Timestamps for reconciliation", "Indexes for performance"]
+      },
+      challenge: {
+        es: "Concurrencia en sincronización: si el usuario edita en dos dispositivos sin conexión, ¿cuál gana? Implementé timestamps updatedAt + estrategia last-write-wins con modal de aviso al detectar conflicto.",
+        en: "Sync concurrency: if the user edits on two offline devices, which wins? Implemented updatedAt timestamps + last-write-wins strategy with a conflict warning modal."
+      }
+    };
+
+    const reactDetail: TechDetail = {
+      name: "React",
+      logo: "/logos/react.png",
+      description: {
+        es: "Interfaces reactivas en el Portfolio (SPA multiidioma, temas claro/oscuro, canvas animado) y ClassTracker (PWA offline con sincronización a Supabase). También usado en VelocReader para interfaz de lectura multiplataforma.",
+        en: "Reactive interfaces in the Portfolio (multilingual SPA, light/dark themes, animated canvas) and ClassTracker (offline PWA with Supabase sync). Also used in VelocReader for a cross-platform reading interface."
+      },
+      learningSource: { es: "Proyectos propios: Portfolio, ClassTracker, VelocReader", en: "Own projects: Portfolio, ClassTracker, VelocReader" },
+      skills: {
+        es: ["Hooks (useState, useEffect, useCallback)", "Custom hooks para lógica compartida", "Dexie React Hooks para IndexedDB", "React.memo y optimización de renders", "React 19 con Fast Refresh"],
+        en: ["Hooks (useState, useEffect, useCallback)", "Custom hooks for shared logic", "Dexie React Hooks for IndexedDB", "React.memo and render optimization", "React 19 with Fast Refresh"]
+      },
+      challenge: {
+        es: "Canvas de ribbons desacoplado de React: la primera versión con refs causaba re-renders lentos. Solución: requestAnimationFrame completamente independiente del ciclo de vida de React.",
+        en: "Decoupling the ribbon canvas from React: the first version with refs caused slow re-renders. Solution: requestAnimationFrame fully independent from the React lifecycle."
+      }
+    };
+
+    const tsDetail: TechDetail = {
+      name: "TypeScript",
+      logo: "/logos/typescript.png",
+      description: {
+        es: "Tipado fuerte en el Portfolio (clases de dominio como Project, Technology, ProjectRepository) y ClassTracker (schema de Dexie con tablas tipadas). Permite refactorizar con confianza.",
+        en: "Strong typing in the Portfolio (domain classes like Project, Technology, ProjectRepository) and ClassTracker (typed Dexie schema). Enables refactoring with confidence."
+      },
+      learningSource: { es: "Proyectos: Portfolio + ClassTracker", en: "Projects: Portfolio + ClassTracker" },
+      skills: {
+        es: ["Clases TypeScript como modelo de dominio", "Tipos unión y discriminated unions", "Type guards y type narrowing", "Genéricos en componentes React", "Integración seamless con Vite"],
+        en: ["TypeScript classes as domain model", "Union types and discriminated unions", "Type guards and type narrowing", "Generics in React components", "Seamless Vite integration"]
+      },
+      challenge: {
+        es: "Tipado de encuestas con campos dinámicos en ClassTracker: los campos son configurables por el usuario. Solución: type guards combinados con validación en runtime para mantener seguridad sin sacrificar flexibilidad.",
+        en: "Typing dynamic survey fields in ClassTracker: fields are user-configurable. Solution: type guards combined with runtime validation to keep safety without sacrificing flexibility."
+      }
+    };
+
+    const tailwindDetail: TechDetail = {
+      name: "Tailwind CSS",
+      logo: "/logos/tailwindcss.png",
+      description: {
+        es: "Diseño responsivo en el Portfolio y ClassTracker sin escribir media queries manuales. Sistema de temas claro/oscuro implementado con CSS variables + atributo data-theme en el HTML.",
+        en: "Responsive design in the Portfolio and ClassTracker without writing manual media queries. Light/dark theme system implemented with CSS variables + data-theme attribute on HTML."
+      },
+      learningSource: { es: "Proyectos: Portfolio + ClassTracker", en: "Projects: Portfolio + ClassTracker" },
+      skills: {
+        es: ["Utility-first CSS (sin BEM ni módulos)", "CSS variables con data-theme para temas", "Responsive modifiers (sm:, md:, lg:)", "@apply para componentes recurrentes", "JIT compiler con safeList para clases dinámicas"],
+        en: ["Utility-first CSS (no BEM or modules)", "CSS variables with data-theme for themes", "Responsive modifiers (sm:, md:, lg:)", "@apply for recurring components", "JIT compiler with safeList for dynamic classes"]
+      },
+      challenge: {
+        es: "Clases dinámicas generadas en JavaScript (como 'from-orange-500 to-amber-600') no se incluían en el build porque Tailwind no las detecta en tiempo de compilación. Solución: agregar las clases a safeList en la config.",
+        en: "Dynamically generated classes in JavaScript (like 'from-orange-500 to-amber-600') were not included in the build because Tailwind can't detect them at compile time. Solution: add the classes to safeList in the config."
+      }
+    };
+
+    const nodejsDetail: TechDetail = {
+      name: "Node.js",
+      logo: "/logos/nodejs.png",
+      description: {
+        es: "Entorno de ejecución JavaScript del lado del servidor. Actualmente en aprendizaje activo, explorando APIs con Express y herramientas CLI.",
+        en: "Server-side JavaScript runtime. Currently in active learning, exploring APIs with Express and CLI tools."
+      },
+      learningSource: { es: "Aprendizaje activo + documentación oficial", en: "Active learning + official documentation" },
+      skills: {
+        es: ["CommonJS y ESM", "npm ecosystem", "Scripts CLI", "Bases de Express.js"],
+        en: ["CommonJS and ESM", "npm ecosystem", "CLI scripts", "Express.js basics"]
+      }
     };
 
     const masteredTechs = [
       new Technology("Python", "/logos/python.png", "mastered", true, pythonDetail,
-        { es: "Análisis de datos, automatización de tareas y scripts de procesamiento.", en: "Data analysis, task automation and processing scripts." }),
-      new Technology("JavaScript", "/logos/javascript.png", "mastered", false, undefined,
-        { es: "Lógica de apps web, manipulación del DOM e interactividad.", en: "Web app logic, DOM manipulation and interactivity." }),
-      new Technology("git", "/logos/git.png", "mastered", false, undefined,
+        { es: "Análisis de datos, automatización y scripts de procesamiento.", en: "Data analysis, automation and processing scripts." }),
+      new Technology("JavaScript", "/logos/javascript.png", "mastered", true, jsDetail,
+        { es: "Lógica de apps web, parsing de emails y automatización.", en: "Web app logic, email parsing and automation." }),
+      new Technology("git", "/logos/git.png", "mastered", true, gitDetail,
         { es: "Control de versiones y colaboración en proyectos de software.", en: "Version control and collaboration on software projects." }),
-      new Technology("APIs REST", "/logos/rest-api.svg", "mastered", false, undefined,
-        { es: "Integración de servicios externos y comunicación entre sistemas.", en: "External service integration and inter-system communication." }),
-      new Technology("n8n", "/logos/n8n.svg", "mastered", false, undefined,
-        { es: "Automatización de flujos de trabajo sin código entre aplicaciones.", en: "No-code workflow automation between applications." }),
+      new Technology("PostgreSQL", "/logos/postgresql.svg", "mastered", true, postgresDetail,
+        { es: "Base de datos relacional para persistencia y consultas complejas.", en: "Relational database for persistence and complex queries." }),
     ];
 
     const learningTechs = [
-      new Technology("Tailwind CSS", "/logos/tailwindcss.png", "learning", false, undefined,
+      new Technology("Tailwind CSS", "/logos/tailwindcss.png", "learning", true, tailwindDetail,
         { es: "Framework de utilidades CSS para diseñar interfaces rápidamente.", en: "CSS utility framework for rapid interface design." }),
-      new Technology("React", "/logos/react.png", "learning", false, undefined,
+      new Technology("React", "/logos/react.png", "learning", true, reactDetail,
         { es: "Biblioteca para construir interfaces de usuario con componentes.", en: "Library for building user interfaces with components." }),
-      new Technology("TypeScript", "/logos/typescript.png", "learning", false, undefined,
+      new Technology("TypeScript", "/logos/typescript.png", "learning", true, tsDetail,
         { es: "JavaScript tipado para código más seguro y mantenible.", en: "Typed JavaScript for safer, more maintainable code." }),
-      new Technology("Node.js", "/logos/nodejs.png", "learning", false, undefined,
+      new Technology("Node.js", "/logos/nodejs.png", "learning", true, nodejsDetail,
         { es: "Entorno de ejecución de JavaScript del lado del servidor.", en: "JavaScript runtime environment for the server side." }),
     ];
 
+    const n8nDetail: TechDetail = {
+      name: "n8n",
+      logo: "/logos/n8n.svg",
+      description: {
+        es: "Pipeline end-to-end para la automatización de reservas: lee emails de Airbnb y Booking vía IMAP, parsea, deduplica y crea deals en Bitrix24 sin intervención manual tras el deploy.",
+        en: "End-to-end pipeline for reservation automation: reads Airbnb and Booking emails via IMAP, parses, deduplicates and creates deals in Bitrix24 without manual intervention after deploy."
+      },
+      learningSource: { es: "Proyecto: Automatización de Reservas", en: "Project: Reservation Automation" },
+      skills: {
+        es: ["Nodos IMAP, HTTP, Code y PostgreSQL", "Workflows visuales con IF y loops", "Code nodes en JavaScript para parsing complejo", "Webhooks para testing manual", "Gestión de errores con fallback a tarea manual"],
+        en: ["IMAP, HTTP, Code and PostgreSQL nodes", "Visual workflows with IF and loops", "JavaScript Code nodes for complex parsing", "Webhooks for manual testing", "Error handling with fallback to manual task"]
+      },
+      challenge: {
+        es: "Deduplicación en dos capas: n8n puede re-ejecutarse y crear duplicados. Solución: UNIQUE CONSTRAINT en PostgreSQL como guardrail + lógica n8n que busca el deal en Bitrix antes de crearlo + logging para auditoría.",
+        en: "Two-layer deduplication: n8n can re-run and create duplicates. Solution: PostgreSQL UNIQUE CONSTRAINT as guardrail + n8n logic that searches for the deal in Bitrix before creating it + audit logging."
+      }
+    };
+
     const toolTechs = [
+      new Technology("n8n", "/logos/n8n.svg", "tool", true, n8nDetail,
+        { es: "Automatización de flujos de trabajo entre aplicaciones.", en: "No-code workflow automation between applications." }),
       new Technology("VS Code", "/logos/vscode.svg", "tool", false, undefined,
         { es: "Editor principal para todo el desarrollo.", en: "Main editor for all development." }),
       new Technology("GitHub", "/logos/github.svg", "tool", false, undefined,
@@ -764,9 +905,11 @@ const Modal: React.FC<{ open: boolean; onClose: () => void; children: React.Reac
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
+          onClick={onClose}
         >
           <motion.div
             className="bg-gray-900 border border-cyberaccent/30 rounded max-w-4xl max-h-[90vh] overflow-y-auto relative"
+            onClick={e => e.stopPropagation()}
             initial={{ scale: 0.9, opacity: 0, y: 30 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 30 }}
@@ -1171,7 +1314,7 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
                 logo={tech.logo}
                 variant="ok"
                 hasDetail={tech.hasDetail}
-                shine={tech.name === "Python"}
+                shine={tech.hasDetail}
                 tooltip={tech.tooltip?.[lang]}
                 onClick={() => tech.hasDetail && openTechDetails(tech.name)}
               />
@@ -1188,6 +1331,7 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
                 logo={tech.logo}
                 variant="learn"
                 hasDetail={tech.hasDetail}
+                shine={tech.hasDetail}
                 tooltip={tech.tooltip?.[lang]}
                 onClick={() => tech.hasDetail && openTechDetails(tech.name)}
               />
@@ -1205,8 +1349,10 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
               name={tech.name}
               logo={tech.logo}
               variant="tool"
-              hasDetail={false}
+              hasDetail={tech.hasDetail}
+              shine={tech.hasDetail}
               tooltip={tech.tooltip?.[lang]}
+              onClick={() => tech.hasDetail && openTechDetails(tech.name)}
             />
           ))}
         </motion.div>
@@ -1224,32 +1370,39 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
 
             <div className="p-6">
               <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-2">{lang === "es" ? "Mi experiencia" : "My experience"}</h3>
-                <p className="text-gray-300 leading-relaxed">{selectedTech.description[lang]}</p>
+                <h3 className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-2">{lang === "es" ? "Descripción" : "Description"}</h3>
+                <p className="text-gray-300 leading-relaxed text-sm">{selectedTech.description[lang]}</p>
               </div>
 
               <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-2">{lang === "es" ? "Dónde aprendí" : "Where I learned"}</h3>
+                <h3 className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-2">{lang === "es" ? "Dónde lo apliqué" : "Where I applied it"}</h3>
                 <div className="text-sm bg-cyberaccent/10 px-3 py-2 rounded border border-cyberaccent/30 inline-block text-cyberaccent">
-                  🎓 {selectedTech.learningSource[lang]}
+                  {selectedTech.learningSource[lang]}
                 </div>
               </div>
 
               <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-2">{lang === "es" ? "Habilidades desarrolladas" : "Skills developed"}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <h3 className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-2">{lang === "es" ? "Conceptos y características usadas" : "Concepts & features used"}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
                   {selectedTech.skills[lang].map((skill, idx) => (
-                    <div key={idx} className="flex items-center text-gray-300">
-                      <span className="text-green-400 mr-2">✓</span>
+                    <div key={idx} className="flex items-start gap-2 text-sm text-gray-300">
+                      <span className="text-cyberaccent mt-0.5 shrink-0">—</span>
                       {skill}
                     </div>
                   ))}
                 </div>
               </div>
 
+              {selectedTech.challenge && (
+                <div className="mb-6">
+                  <h3 className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-2">{lang === "es" ? "Desafío principal" : "Main challenge"}</h3>
+                  <p className="text-sm text-gray-300 leading-relaxed border-l-2 border-cyberaccent/40 pl-3">{selectedTech.challenge[lang]}</p>
+                </div>
+              )}
+
               {selectedTech.certificate && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">{lang === "es" ? "Certificado" : "Certificate"}</h3>
+                  <h3 className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-2">{lang === "es" ? "Certificado" : "Certificate"}</h3>
                   <div className="border border-gray-600 overflow-hidden rounded bg-white p-4 max-w-lg mx-auto">
                     <img src={selectedTech.certificate} alt={`Certificado de ${selectedTech.name}`} loading="lazy" decoding="async" className="w-full h-auto object-contain" />
                   </div>
@@ -1397,49 +1550,81 @@ const ContactSection: React.FC<{
 };
 
 const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = ({ translations, lang }) => {
+  const interests = lang === "es"
+    ? ["Desarrollo full stack", "APIs e integración de sistemas", "Automatización de procesos", "Arquitectura de software", "Herramientas de IA para desarrollo"]
+    : ["Full stack development", "APIs & system integration", "Process automation", "Software architecture", "AI tools for development"];
+
   return (
     <div>
       <SectionTitle>{translations.learnMore}</SectionTitle>
       <motion.div className="max-w-3xl mx-auto space-y-4" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
 
-        {/* Stats */}
-        <motion.div variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }} className="grid grid-cols-3 gap-3">
-          <motion.div variants={fadeUp} className="p-4 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
-            <div className="text-2xl font-bold text-amber-400">3</div>
-            <div className="text-xs text-gray-400 mt-1">{lang === "es" ? "Proyectos" : "Projects"}</div>
-          </motion.div>
-          <motion.div variants={fadeUp} className="btn-shine p-4 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
-            <div className="text-2xl font-bold text-amber-400">+3.000</div>
-            <div className="text-xs text-gray-400 mt-1">{lang === "es" ? "Usuarios" : "Users"}</div>
-          </motion.div>
-          <motion.div variants={fadeUp} className="p-4 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
-            <div className="text-2xl font-bold text-amber-400">UTN</div>
-            <div className="text-xs text-gray-400 mt-1">{lang === "es" ? "Ing. en Sistemas" : "Systems Eng."}</div>
-          </motion.div>
-        </motion.div>
-
-        {/* Descripción */}
-        <motion.div variants={fadeUp} className="p-6 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-4">
+        {/* Bio */}
+        <motion.div variants={fadeUp} className="p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl">
           <p className="text-sm text-gray-300 leading-relaxed">
             {lang === "es"
-              ? "Estudiante de Ingeniería en Sistemas en la UTN, con foco en automatización, integración de APIs e interfaces web. Me interesa el desarrollo de herramientas que resuelvan problemas reales de forma eficiente."
-              : "Systems Engineering student at UTN, focused on automation, API integration and web interfaces. I'm interested in building tools that solve real problems efficiently."}
+              ? "Estudiante de Ingeniería en Sistemas en UTN. Desarrollo aplicaciones web, automatizaciones e integraciones de APIs utilizando Python y JavaScript. Mis proyectos han sido utilizados por más de 3.000 usuarios. Actualmente profundizando en React, TypeScript y desarrollo full stack."
+              : "Systems Engineering student at UTN. I build web applications, automations and API integrations using Python and JavaScript. My projects have been used by more than 3,000 users. Currently deepening my knowledge in React, TypeScript and full stack development."}
           </p>
+        </motion.div>
 
-          <div className="pt-3 border-t border-gray-700 flex flex-col items-center gap-2">
-            <span className="text-xs text-gray-400">{lang === "es" ? "Repositorio del portfolio" : "Portfolio repository"}</span>
-            <a
-              href="https://github.com/Isaacxiddd/isaac-portfolio"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-shine inline-flex items-center gap-2 px-5 py-2.5 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
-              </svg>
-              GitHub
-            </a>
+        {/* Info grid */}
+        <motion.div variants={fadeUp} className="grid sm:grid-cols-2 gap-4">
+
+          {/* Educación */}
+          <div className="p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-1">
+            <div className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-2">{lang === "es" ? "Educación" : "Education"}</div>
+            <div className="text-sm text-gray-200 font-medium">{lang === "es" ? "Ingeniería en Sistemas de Información" : "Information Systems Engineering"}</div>
+            <div className="text-xs text-gray-400">UTN FRBA</div>
           </div>
+
+          {/* Ubicación e idiomas */}
+          <div className="p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-3">
+            <div>
+              <div className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-1">{lang === "es" ? "Ubicación" : "Location"}</div>
+              <div className="text-sm text-gray-300">Argentina</div>
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-1">{lang === "es" ? "Idiomas" : "Languages"}</div>
+              <div className="text-sm text-gray-300">{lang === "es" ? "Español, Inglés, Portugués, Italiano" : "Spanish, English, Portuguese, Italian"}</div>
+            </div>
+          </div>
+
+          {/* Stat usuarios */}
+          <div className="btn-shine p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
+            <div className="text-3xl font-bold text-amber-400">+3.000</div>
+            <div className="text-xs text-gray-400 mt-1">{lang === "es" ? "usuarios alcanzados con proyectos propios" : "users reached through own projects"}</div>
+          </div>
+
+          {/* Intereses */}
+          <div className="p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl">
+            <div className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-3">{lang === "es" ? "Intereses actuales" : "Current interests"}</div>
+            <ul className="space-y-1">
+              {interests.map((item) => (
+                <li key={item} className="text-sm text-gray-300 flex items-start gap-2">
+                  <span className="text-cyberaccent mt-0.5 shrink-0">—</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+        </motion.div>
+
+        {/* Repo */}
+        <motion.div variants={fadeUp} className="flex flex-col items-center gap-2">
+          <span className="text-xs text-gray-400">{lang === "es" ? "Repositorio del portfolio" : "Portfolio repository"}</span>
+          <a
+            href="https://github.com/Isaacxiddd/isaac-portfolio"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-shine inline-flex items-center gap-2 px-5 py-2.5 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
+            </svg>
+            GitHub
+          </a>
         </motion.div>
 
       </motion.div>
