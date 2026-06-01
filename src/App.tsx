@@ -354,7 +354,8 @@ class Technology {
     public readonly logo: string,
     public readonly status: 'mastered' | 'learning',
     public readonly hasDetail: boolean = false,
-    public readonly detail?: TechDetail
+    public readonly detail?: TechDetail,
+    public readonly tooltip?: { es: string; en: string }
   ) {}
 
   isDetailed(): boolean {
@@ -393,18 +394,27 @@ class TechnologyRepository {
     };
 
     const masteredTechs = [
-      new Technology("Python", "/logos/python.png", "mastered", true, pythonDetail),
-      new Technology("JavaScript", "/logos/javascript.png", "mastered"),
-      new Technology("git", "/logos/git.png", "mastered"),
-      new Technology("APIs REST", "/logos/rest-api.svg", "mastered"),
-      new Technology("n8n", "/logos/n8n.svg", "mastered"),
+      new Technology("Python", "/logos/python.png", "mastered", true, pythonDetail,
+        { es: "Análisis de datos, automatización de tareas y scripts de procesamiento.", en: "Data analysis, task automation and processing scripts." }),
+      new Technology("JavaScript", "/logos/javascript.png", "mastered", false, undefined,
+        { es: "Lógica de apps web, manipulación del DOM e interactividad.", en: "Web app logic, DOM manipulation and interactivity." }),
+      new Technology("git", "/logos/git.png", "mastered", false, undefined,
+        { es: "Control de versiones y colaboración en proyectos de software.", en: "Version control and collaboration on software projects." }),
+      new Technology("APIs REST", "/logos/rest-api.svg", "mastered", false, undefined,
+        { es: "Integración de servicios externos y comunicación entre sistemas.", en: "External service integration and inter-system communication." }),
+      new Technology("n8n", "/logos/n8n.svg", "mastered", false, undefined,
+        { es: "Automatización de flujos de trabajo sin código entre aplicaciones.", en: "No-code workflow automation between applications." }),
     ];
 
     const learningTechs = [
-      new Technology("Tailwind CSS", "/logos/tailwindcss.png", "learning"),
-      new Technology("React", "/logos/react.png", "learning"),
-      new Technology("TypeScript", "/logos/typescript.png", "learning"),
-      new Technology("Node.js", "/logos/nodejs.png", "learning"),
+      new Technology("Tailwind CSS", "/logos/tailwindcss.png", "learning", false, undefined,
+        { es: "Framework de utilidades CSS para diseñar interfaces rápidamente.", en: "CSS utility framework for rapid interface design." }),
+      new Technology("React", "/logos/react.png", "learning", false, undefined,
+        { es: "Biblioteca para construir interfaces de usuario con componentes.", en: "Library for building user interfaces with components." }),
+      new Technology("TypeScript", "/logos/typescript.png", "learning", false, undefined,
+        { es: "JavaScript tipado para código más seguro y mantenible.", en: "Typed JavaScript for safer, more maintainable code." }),
+      new Technology("Node.js", "/logos/nodejs.png", "learning", false, undefined,
+        { es: "Entorno de ejecución de JavaScript del lado del servidor.", en: "JavaScript runtime environment for the server side." }),
     ];
 
     this.technologies = [...masteredTechs, ...learningTechs];
@@ -769,11 +779,12 @@ type TechPillProps = {
   logo: string;
   variant?: "ok" | "learn";
   hasDetail?: boolean;
+  tooltip?: string;
   onClick?: () => void;
 };
 
-const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "ok", hasDetail = false, onClick }) => {
-  const base = "flex flex-col items-center gap-3 p-6 rounded-xl transition-all duration-300 transform hover:scale-105 cursor-pointer min-w-[120px] min-h-[120px] justify-center";
+const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "ok", hasDetail = false, tooltip, onClick }) => {
+  const base = "relative flex flex-col items-center gap-3 p-6 rounded-xl transition-all duration-300 transform hover:scale-105 cursor-pointer min-w-[120px] min-h-[120px] justify-center group";
   const variantClasses =
     variant === "ok"
       ? "bg-green-500/10 border border-green-500/30 hover:bg-green-500/20 hover:border-green-400/50 hover:shadow-lg hover:shadow-green-500/25"
@@ -784,6 +795,13 @@ const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "o
       <img src={logo} alt={name} loading="lazy" decoding="async" className="w-12 h-12 object-contain" />
       <span className="text-sm font-medium text-center">{name}</span>
       {hasDetail && <span className="text-xs opacity-60">ℹ️ Info</span>}
+      {tooltip && (
+        <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-44 px-3 py-2 rounded-lg text-xs leading-snug text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 shadow-lg"
+          style={{ background: 'var(--tooltip-bg, #111)', color: 'var(--tooltip-text, #fff)', border: '1px solid rgba(255,255,255,0.12)' }}>
+          {tooltip}
+          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent" style={{ borderTopColor: 'var(--tooltip-bg, #111)' }} />
+        </div>
+      )}
     </motion.div>
   );
 });
@@ -1118,6 +1136,7 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
                 logo={tech.logo}
                 variant="ok"
                 hasDetail={tech.hasDetail}
+                tooltip={tech.tooltip?.[lang]}
                 onClick={() => tech.hasDetail && openTechDetails(tech.name)}
               />
             ))}
@@ -1133,6 +1152,7 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
                 logo={tech.logo}
                 variant="learn"
                 hasDetail={tech.hasDetail}
+                tooltip={tech.tooltip?.[lang]}
                 onClick={() => tech.hasDetail && openTechDetails(tech.name)}
               />
             ))}
