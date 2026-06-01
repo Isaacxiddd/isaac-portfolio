@@ -959,10 +959,7 @@ const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "o
       : "bg-orange-500/10 border border-orange-500/30 hover:bg-orange-500/20 hover:border-orange-400/50 hover:shadow-lg hover:shadow-orange-500/25";
 
   return (
-    <motion.div variants={popIn} className={`${base} ${variantClasses} ${shine ? "pill-shine" : ""} ${hasDetail ? "hover:brightness-110" : ""}`} onClick={onClick}>
-      <img src={logo} alt={name} loading="lazy" decoding="async" className="w-12 h-12 object-contain" />
-      <span className="text-sm font-medium text-center">{name}</span>
-      {hasDetail && !shine && <span className="text-xs opacity-60">ℹ️ Info</span>}
+    <motion.div variants={popIn} className="relative group">
       {tooltip && (
         <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-44 px-3 py-2 rounded-lg text-xs leading-snug text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 shadow-lg"
           style={{ background: 'var(--tooltip-bg, #111)', color: 'var(--tooltip-text, #fff)', border: '1px solid rgba(255,255,255,0.12)' }}>
@@ -970,6 +967,10 @@ const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "o
           <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent" style={{ borderTopColor: 'var(--tooltip-bg, #111)' }} />
         </div>
       )}
+      <div className={`${base} ${variantClasses} ${shine ? "pill-shine" : ""} ${hasDetail ? "hover:brightness-110" : ""}`} onClick={onClick}>
+        <img src={logo} alt={name} loading="lazy" decoding="async" className="w-12 h-12 object-contain" />
+        <span className="text-sm font-medium text-center">{name}</span>
+      </div>
     </motion.div>
   );
 });
