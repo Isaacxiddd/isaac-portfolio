@@ -1572,11 +1572,16 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
         <motion.div variants={fadeUp} className="grid sm:grid-cols-2 gap-4">
 
           {/* Educación */}
-          <div className="p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-1">
+          <a
+            href="https://utn.edu.ar/es/federacion-universitaria-tecnologica/feria-de-carreras/sistemas-de-informacion"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-shine block p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-1"
+          >
             <div className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-2">{lang === "es" ? "Educación" : "Education"}</div>
             <div className="text-sm text-gray-200 font-medium">{lang === "es" ? "Ingeniería en Sistemas de Información" : "Information Systems Engineering"}</div>
             <div className="text-xs text-gray-400">UTN FRBA</div>
-          </div>
+          </a>
 
           {/* Ubicación e idiomas */}
           <div className="p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl space-y-3">
@@ -1625,6 +1630,7 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
             </svg>
             GitHub
           </a>
+            
         </motion.div>
 
       </motion.div>
