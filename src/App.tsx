@@ -876,7 +876,7 @@ const AboutSection: React.FC<{
             <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-4">
               <button
                 onClick={AppConfig.openGitHub}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-gray-500/50 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
+                className="btn-shine inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-gray-500/50 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                   <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
@@ -885,7 +885,7 @@ const AboutSection: React.FC<{
               </button>
               <button
                 onClick={AppConfig.openLinkedIn}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-cyberaccent/50 rounded-lg bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
+                className="btn-shine inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-cyberaccent/50 rounded-lg bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                   <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.93v5.68H9.35V9h3.42v1.56h.05c.48-.91 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51v6.23zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.13 20.45H3.55V9h3.58v11.45z" />
@@ -895,7 +895,7 @@ const AboutSection: React.FC<{
               <a
                 href={lang === 'en' ? AppConfig.CV_PATH_EN : AppConfig.CV_PATH}
                 download
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-cyberaccent/50 rounded-lg bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
+                className="btn-shine inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-cyberaccent/50 rounded-lg bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
@@ -1327,7 +1327,7 @@ const ContactSection: React.FC<{
           </button>
           <button
             onClick={AppConfig.openLinkedIn}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm border border-cyberaccent/50 rounded bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
+            className="btn-shine inline-flex items-center gap-2 px-4 py-2 text-sm border border-cyberaccent/50 rounded bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.93v5.68H9.35V9h3.42v1.56h.05c.48-.91 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51v6.23zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.13 20.45H3.55V9h3.58v11.45z" />
@@ -1336,7 +1336,7 @@ const ContactSection: React.FC<{
           </button>
           <button
             onClick={AppConfig.openGitHub}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
+            className="btn-shine inline-flex items-center gap-2 px-4 py-2 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
@@ -1358,16 +1358,18 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
 
         {/* Stats */}
         <motion.div variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }} className="grid grid-cols-3 gap-3">
-          {[
-            { value: "3", label: lang === "es" ? "Proyectos" : "Projects" },
-            { value: "+3.000", label: lang === "es" ? "Usuarios" : "Users" },
-            { value: "UTN", label: lang === "es" ? "Ing. en Sistemas" : "Systems Eng." },
-          ].map(({ value, label }) => (
-            <motion.div variants={fadeUp} key={label} className="p-4 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
-              <div className="text-2xl font-bold text-amber-400">{value}</div>
-              <div className="text-xs text-gray-400 mt-1">{label}</div>
-            </motion.div>
-          ))}
+          <motion.div variants={fadeUp} className="p-4 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
+            <div className="text-2xl font-bold text-amber-400">3</div>
+            <div className="text-xs text-gray-400 mt-1">{lang === "es" ? "Proyectos" : "Projects"}</div>
+          </motion.div>
+          <motion.div variants={fadeUp} className="btn-shine p-4 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
+            <div className="text-2xl font-bold text-amber-400">+3.000</div>
+            <div className="text-xs text-gray-400 mt-1">{lang === "es" ? "Usuarios" : "Users"}</div>
+          </motion.div>
+          <motion.div variants={fadeUp} className="p-4 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
+            <div className="text-2xl font-bold text-amber-400">UTN</div>
+            <div className="text-xs text-gray-400 mt-1">{lang === "es" ? "Ing. en Sistemas" : "Systems Eng."}</div>
+          </motion.div>
         </motion.div>
 
         {/* Descripción */}
@@ -1381,7 +1383,7 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
           <div className="pt-3 border-t border-gray-700 flex flex-wrap gap-3 justify-center">
             <button
               onClick={AppConfig.openGitHub}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
+              className="btn-shine inline-flex items-center gap-2 px-5 py-2.5 text-sm border border-gray-500/50 rounded bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                 <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
@@ -1436,9 +1438,9 @@ const Sidebar: React.FC<{
         <button
           key={label}
           onClick={() => onMenuClick(i)}
-          className={`w-full text-left p-3 my-2 rounded transition-all relative ${
-            i === activeIndex 
-              ? "bg-cyberaccent/10 text-cyberaccent" 
+          className={`btn-star w-full text-left p-3 my-2 rounded transition-all relative ${
+            i === activeIndex
+              ? "bg-cyberaccent/10 text-cyberaccent"
               : "hover:bg-cyberaccent/10 hover:text-blue-200"
           }`}
         >
@@ -1456,7 +1458,7 @@ const Sidebar: React.FC<{
       <a
         href={lang === 'en' ? AppConfig.CV_PATH_EN : AppConfig.CV_PATH}
         download
-        className="px-3 py-2 text-xs border border-cyberaccent/50 rounded text-center hover:bg-cyberaccent/20 transition-colors"
+        className="btn-shine btn-star px-3 py-2 text-xs border border-cyberaccent/50 rounded text-center hover:bg-cyberaccent/20 transition-colors"
       >
         {translations.downloadCV}
       </a>

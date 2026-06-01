@@ -573,3 +573,64 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
 
 /* Mobile toggle button */
 [data-theme="ps3"] button.fixed { color: #1a3a6b !important; }
+
+/* ========================= SHINE EFFECT ========================= */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 45%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.65) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  transform: skewX(-20deg);
+  transition: none;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.btn-shine:hover::after {
+  left: 130%;
+  transition: left 0.5s ease;
+}
+
+/* ========================= STARBURST EFFECT ========================= */
+.btn-star {
+  position: relative;
+}
+
+.btn-star::after {
+  content: '✦';
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  transform: scale(0.3) rotate(-30deg);
+  transition: opacity 0.25s ease, transform 0.3s ease;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  line-height: 1;
+  z-index: 10;
+}
+
+.btn-star:hover::after {
+  opacity: 1;
+  transform: scale(1) rotate(20deg);
+}
+
+[data-theme="ps3"] .btn-star::after {
+  color: rgba(0, 85, 204, 0.9);
+  text-shadow: 0 0 8px rgba(0, 85, 204, 0.6);
+}
