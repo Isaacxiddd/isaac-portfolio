@@ -781,7 +781,7 @@ const TechPill: React.FC<TechPillProps> = React.memo(({ name, logo, variant = "o
 
   return (
     <motion.div variants={popIn} className={`${base} ${variantClasses} ${hasDetail ? "hover:brightness-110" : ""}`} onClick={onClick}>
-      <img src={logo} alt={name} className="w-12 h-12 object-contain" />
+      <img src={logo} alt={name} loading="lazy" decoding="async" className="w-12 h-12 object-contain" />
       <span className="text-sm font-medium text-center">{name}</span>
       {hasDetail && <span className="text-xs opacity-60">ℹ️ Info</span>}
     </motion.div>
@@ -905,11 +905,11 @@ const AboutSection: React.FC<{
   );
 };
 
-const ProjectsSection: React.FC<{ 
-  translations: Translations; 
-  lang: Lang; 
+const ProjectsSection = React.memo(({ translations, lang, projectRepo }: {
+  translations: Translations;
+  lang: Lang;
   projectRepo: ProjectRepository;
-}> = ({ translations, lang, projectRepo }) => {
+}) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const projects = projectRepo.getAllProjects();
@@ -1037,7 +1037,7 @@ const ProjectsSection: React.FC<{
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {selectedProject.images.map((image, index) => (
                       <div key={index} className="border border-gray-600 overflow-hidden rounded">
-                        <img src={image} alt={`${selectedProject.name} screenshot ${index + 1}`} className="w-full h-48 object-cover hover:scale-105 transition-transform" />
+                        <img src={image} alt={`${selectedProject.name} screenshot ${index + 1}`} loading="lazy" decoding="async" className="w-full h-48 object-cover hover:scale-105 transition-transform" />
                       </div>
                     ))}
                   </div>
@@ -1083,13 +1083,13 @@ const ProjectsSection: React.FC<{
       </Modal>
     </div>
   );
-};
+});
 
-const TechnologiesSection: React.FC<{ 
-  translations: Translations; 
-  lang: Lang; 
+const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
+  translations: Translations;
+  lang: Lang;
   techRepo: TechnologyRepository;
-}> = ({ translations, lang, techRepo }) => {
+}) => {
   const [selectedTech, setSelectedTech] = useState<TechDetail | null>(null);
   
   const masteredTechs = techRepo.getMasteredTechnologies();
@@ -1145,7 +1145,7 @@ const TechnologiesSection: React.FC<{
           <>
             <div className="sticky top-0 bg-gray-900 p-4 border-b border-gray-700 flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <img src={selectedTech.logo} alt={selectedTech.name} className="w-8 h-8 object-contain" />
+                <img src={selectedTech.logo} alt={selectedTech.name} loading="lazy" decoding="async" className="w-8 h-8 object-contain" />
                 <h2 className="text-xl font-bold">{selectedTech.name}</h2>
               </div>
             </div>
@@ -1179,7 +1179,7 @@ const TechnologiesSection: React.FC<{
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-2">{lang === "es" ? "Certificado" : "Certificate"}</h3>
                   <div className="border border-gray-600 overflow-hidden rounded bg-white p-4 max-w-lg mx-auto">
-                    <img src={selectedTech.certificate} alt={`Certificado de ${selectedTech.name}`} className="w-full h-auto object-contain" />
+                    <img src={selectedTech.certificate} alt={`Certificado de ${selectedTech.name}`} loading="lazy" decoding="async" className="w-full h-auto object-contain" />
                   </div>
                 </div>
               )}
@@ -1189,7 +1189,7 @@ const TechnologiesSection: React.FC<{
       </Modal>
     </div>
   );
-};
+});
 
 const ContactSection: React.FC<{
   translations: Translations;
