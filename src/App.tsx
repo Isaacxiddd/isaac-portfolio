@@ -589,11 +589,17 @@ function useNavigation() {
 }
 
 function useTranslations() {
-  const [translationManager] = useState(() => TranslationManager.getInstance());
-  const [currentLang, setCurrentLang] = useState<Lang>('es');
+  const [translationManager] = useState(() => {
+    const mgr = TranslationManager.getInstance();
+    const saved = localStorage.getItem('lang') as Lang | null;
+    if (saved === 'en') mgr.toggleLanguage();
+    return mgr;
+  });
+  const [currentLang, setCurrentLang] = useState<Lang>(() => (localStorage.getItem('lang') as Lang) || 'es');
 
   const toggleLanguage = useCallback(() => {
     const newLang = translationManager.toggleLanguage();
+    localStorage.setItem('lang', newLang);
     setCurrentLang(newLang);
   }, [translationManager]);
 
@@ -1483,8 +1489,12 @@ export default function OptimizedPortfolio(): JSX.Element {
   const { activeIndex, setActive, next, previous } = useNavigation();
   const { lang, translations, toggleLanguage } = useTranslations();
   const reducedMotion = usePrefersReducedMotion();
-  const [theme, setTheme] = useState<Theme>('ps3');
-  const toggleTheme = useCallback(() => setTheme(t => t === 'dark' ? 'ps3' : 'dark'), []);
+  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem('theme') as Theme) || 'ps3');
+  const toggleTheme = useCallback(() => setTheme(t => {
+    const next = t === 'dark' ? 'ps3' : 'dark';
+    localStorage.setItem('theme', next);
+    return next;
+  }), []);
   const { toast, ToastNode } = useToast(theme);
 
   useEffect(() => {
