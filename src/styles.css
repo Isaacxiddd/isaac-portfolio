@@ -584,7 +584,7 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
   content: '';
   position: absolute;
   top: -50%;
-  left: -75%;
+  left: 0;
   width: 45%;
   height: 200%;
   background: linear-gradient(
@@ -593,21 +593,22 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
     rgba(255,255,255,0.65) 50%,
     rgba(255,255,255,0) 100%
   );
-  transform: skewX(-20deg);
+  transform: skewX(-20deg) translateX(-167%);
   transition: none;
   pointer-events: none;
   z-index: 10;
+  will-change: transform;
 }
 
 .btn-shine:hover::after {
-  left: 130%;
-  transition: left 0.5s ease;
+  transform: skewX(-20deg) translateX(289%);
+  transition: transform 0.5s ease;
 }
 
 /* ========================= PILL SHINE (loop) ========================= */
 @keyframes pill-shine-move {
-  0%   { left: -75%; }
-  100% { left: 130%; }
+  0%   { transform: skewX(-20deg) translateX(-187.5%); }
+  100% { transform: skewX(-20deg) translateX(325%); }
 }
 
 .pill-shine {
@@ -619,7 +620,7 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
   content: '';
   position: absolute;
   top: -50%;
-  left: -75%;
+  left: 0;
   width: 40%;
   height: 200%;
   background: linear-gradient(
@@ -628,9 +629,10 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
     rgba(255,255,255,0.55) 50%,
     rgba(255,255,255,0) 100%
   );
-  transform: skewX(-20deg);
+  transform: skewX(-20deg) translateX(-187.5%);
   pointer-events: none;
   z-index: 10;
+  will-change: transform;
   animation: pill-shine-move 2.8s ease-in-out infinite;
   animation-delay: 1s;
 }

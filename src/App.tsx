@@ -200,7 +200,7 @@ class Project {
 /**
  * Repositorio de proyectos
  */
-class ProjectRepository {
+export class ProjectRepository {
   private projects: Project[] = [];
 
   constructor() {
@@ -374,7 +374,7 @@ class Technology {
 /**
  * Repositorio de tecnologías
  */
-class TechnologyRepository {
+export class TechnologyRepository {
   private technologies: Technology[] = [];
 
   constructor() {
@@ -559,6 +559,39 @@ class TechnologyRepository {
       }
     };
 
+    const claudeCodeDetail: TechDetail = {
+      name: "Claude Code",
+      logo: "/logos/claude-code.svg",
+      description: {
+        es: "Utilizo Claude Code siguiendo prácticas orientadas a maximizar la calidad de las respuestas, reducir el consumo de tokens y mantener la consistencia técnica del proyecto.",
+        en: "I use Claude Code following practices aimed at maximizing response quality, reducing token consumption, and maintaining the technical consistency of the project."
+      },
+      learningSource: {
+        es: "Portafolio v3, ClassTracker, VelocReader y todos los proyectos activos",
+        en: "Portfolio v3, ClassTracker, VelocReader and all active projects"
+      },
+      skills: {
+        es: [
+          "Definición de requerimientos y alcance antes de implementar cambios.",
+          "Gestión eficiente del contexto mediante sesiones enfocadas y documentación persistente.",
+          "Uso de Skills especializadas para tareas recurrentes y dominios específicos.",
+          "Selección estratégica de modelos según complejidad, costo y objetivo.",
+          "Integración de IA como herramienta de desarrollo, revisión y soporte arquitectónico."
+        ],
+        en: [
+          "Requirements and scope definition before implementing changes.",
+          "Efficient context management through focused sessions and persistent documentation.",
+          "Use of specialized Skills for recurring tasks and specific domains.",
+          "Strategic model selection based on complexity, cost, and objective.",
+          "AI integration as a development, review, and architectural support tool."
+        ]
+      },
+      challenge: {
+        es: "Mantener consistencia técnica en proyectos de larga duración sin degradar la calidad del contexto disponible para la IA. Solución: documentación persistente del proyecto, sesiones orientadas a objetivos concretos y separación de responsabilidades por tarea.",
+        en: "Maintaining technical consistency in long-running projects without degrading the quality of context available to the AI. Solution: persistent project documentation, sessions focused on concrete objectives, and separation of responsibilities per task."
+      }
+    };
+
     const toolTechs = [
       new Technology("n8n", "/logos/n8n.svg", "tool", true, n8nDetail,
         { es: "Automatización de flujos de trabajo entre aplicaciones.", en: "No-code workflow automation between applications." }),
@@ -566,7 +599,7 @@ class TechnologyRepository {
         { es: "Editor principal para todo el desarrollo.", en: "Main editor for all development." }),
       new Technology("GitHub", "/logos/github.svg", "tool", false, undefined,
         { es: "Control de versiones y hosting de repositorios.", en: "Version control and repository hosting." }),
-      new Technology("Claude Code", "/logos/claude-code.svg", "tool", false, undefined,
+      new Technology("Claude Code", "/logos/claude-code.svg", "tool", true, claudeCodeDetail,
         { es: "IA para desarrollo: debugging, refactoring y arquitectura.", en: "AI for development: debugging, refactoring and architecture." }),
       new Technology("Figma", "/logos/figma.svg", "tool", false, undefined,
         { es: "Diseño de interfaces y prototipos.", en: "Interface design and prototyping." }),
@@ -1084,7 +1117,10 @@ const AboutSection: React.FC<{
             </motion.div>
           </div>
           <motion.div variants={fadeUp} className="md:w-1/3 flex flex-col items-center md:items-end justify-center">
-            <img src="/avatar.jpg" alt="avatar" className="w-full max-w-[200px] rounded-xl object-cover border border-cyberaccent/30 shadow-lg mb-4" />
+            <picture>
+              <source srcSet="/avatar.webp" type="image/webp" />
+              <img src="/avatar.jpg" alt="avatar" width={200} height={200} fetchPriority="high" className="w-full max-w-[200px] rounded-xl object-cover border border-cyberaccent/30 shadow-lg mb-4" />
+            </picture>
           </motion.div>
         </motion.div>
       </div>
@@ -1383,7 +1419,7 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
               </div>
 
               <div className="mb-6">
-                <h3 className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-2">{lang === "es" ? "Conceptos y características usadas" : "Concepts & features used"}</h3>
+                <h3 className="text-xs font-semibold text-cyberaccent uppercase tracking-wider mb-2">{lang === "es" ? "Conceptos y prácticas aplicadas" : "Concepts & practices applied"}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
                   {selectedTech.skills[lang].map((skill, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-sm text-gray-300">
