@@ -1728,7 +1728,7 @@ const Sidebar: React.FC<{
             <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-6 bg-cyberaccent rounded-full shadow-[0_0_8px_rgba(14,165,255,0.6)]"></div>
           )}
           <div className="text-[11px] opacity-80 ml-2">
-            {i + 1}. {label}
+            {label}
           </div>
         </button>
       ))}
@@ -1803,56 +1803,105 @@ export default function OptimizedPortfolio(): JSX.Element {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
+  const mainRef = useRef<HTMLElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const scrollOverflow = useRef(0);
   const scrollCooldown = useRef(0);
+  const scrollLockUntil = useRef(0);
 
-  // Resetea el scroll al tope cuando cambia de sección
-  useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = 0;
-    }
+  const navigateTo = useCallback((fn: () => void) => {
+    const scrollEl = scrollContainerRef.current;
+    const now = Date.now();
     scrollOverflow.current = 0;
-  }, [activeIndex]);
+    scrollCooldown.current = now;
+    scrollLockUntil.current = now + 700;
+    if (scrollEl) {
+      scrollEl.style.overflowY = 'hidden';
+      scrollEl.scrollTop = 0;
+    }
+    // también resetear window/body por si el layout hace scroll a nivel página
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    fn();
+    setTimeout(() => {
+      const el = scrollContainerRef.current;
+      if (el) {
+        el.scrollTop = 0;
+        el.style.overflowY = '';
+      }
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 50);
+    setTimeout(() => {
+      const el = scrollContainerRef.current;
+      if (el) {
+        el.scrollTop = 0;
+        el.style.overflowY = '';
+      }
+    }, 700);
+  }, []);
 
-  // Navega a la siguiente/anterior sección al llegar a los límites del scroll
+  // Listener en el <main> estable — nunca se desmonta, sin gap entre secciones
   useEffect(() => {
-    const el = scrollContainerRef.current;
+    const el = mainRef.current;
     if (!el) return;
 
     const handleWheel = (e: WheelEvent) => {
       const now = Date.now();
-      if (now - scrollCooldown.current < 1400) {
+
+      // Bloqueo post-navegación: absorbe residuo del gesto con preventDefault
+      if (now < scrollLockUntil.current) {
+        e.preventDefault();
+        return;
+      }
+
+      const scrollEl = scrollContainerRef.current;
+      if (!scrollEl) return;
+
+      // Elementos scrolleables internos (modales, details): dejar pasar
+      let node = e.target as HTMLElement | null;
+      while (node && node !== scrollEl) {
+        const oy = window.getComputedStyle(node).overflowY;
+        if ((oy === 'auto' || oy === 'scroll') && node.scrollHeight > node.clientHeight) {
+          return;
+        }
+        node = node.parentElement;
+      }
+
+      // Cooldown: evita re-navegar inmediatamente
+      if (now - scrollCooldown.current < 1200) {
         scrollOverflow.current = 0;
         return;
       }
 
-      const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 2;
-      const atTop = el.scrollTop <= 0;
+      const atBottom = scrollEl.scrollHeight - scrollEl.scrollTop - scrollEl.clientHeight < 2;
+      const atTop = scrollEl.scrollTop <= 0;
+      const atBoundary = (atBottom && e.deltaY > 0) || (atTop && e.deltaY < 0);
 
-      if (atBottom && e.deltaY > 0) {
-        scrollOverflow.current += e.deltaY;
-      } else if (atTop && e.deltaY < 0) {
-        scrollOverflow.current += e.deltaY;
-      } else {
+      if (!atBoundary) {
         scrollOverflow.current = 0;
         return;
       }
 
-      if (scrollOverflow.current > 380) {
-        scrollOverflow.current = 0;
-        scrollCooldown.current = now;
-        next();
-      } else if (scrollOverflow.current < -380) {
-        scrollOverflow.current = 0;
-        scrollCooldown.current = now;
-        previous();
+      e.preventDefault();
+
+      const hasOverflow = scrollEl.scrollHeight > scrollEl.clientHeight + 5;
+      const threshold = hasOverflow ? 600 : 300;
+      const delta = Math.min(Math.abs(e.deltaY), 40) * Math.sign(e.deltaY);
+      scrollOverflow.current += delta;
+
+      if (scrollOverflow.current > threshold) {
+        navigateTo(next);
+      } else if (scrollOverflow.current < -threshold) {
+        navigateTo(previous);
       }
     };
 
-    el.addEventListener('wheel', handleWheel, { passive: true });
+    el.addEventListener('wheel', handleWheel, { passive: false });
     return () => el.removeEventListener('wheel', handleWheel);
-  }, [next, previous]);
+  }, [next, previous, navigateTo]);
 
   // Repositorios
   const [projectRepo] = useState(() => new ProjectRepository());
@@ -1901,7 +1950,7 @@ export default function OptimizedPortfolio(): JSX.Element {
     <div
       data-theme={theme}
       style={theme === 'ps3' ? { background: 'linear-gradient(160deg, #c0d8f2 0%, #b2cae6 22%, #c5dcf5 55%, #d2e8ff 100%)' } : undefined}
-      className={`min-h-screen flex relative ${theme === 'dark' ? 'bg-gradient-to-br from-[#060714] via-[#071028] to-[#060714] text-white' : 'text-[#0c1e42]'}`}
+      className={`h-screen overflow-hidden flex relative ${theme === 'dark' ? 'bg-gradient-to-br from-[#060714] via-[#071028] to-[#060714] text-white' : 'text-[#0c1e42]'}`}
     >
       <PS3Ribbons theme={theme} />
 
@@ -1930,8 +1979,8 @@ export default function OptimizedPortfolio(): JSX.Element {
       </button>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col relative z-[1]">
-        <div ref={scrollContainerRef} className="flex-1 p-6 overflow-y-auto overflow-x-hidden">
+      <main ref={mainRef} className="flex-1 flex flex-col relative z-[1]">
+        <div ref={scrollContainerRef} className="flex-1 p-6 overflow-y-auto overflow-x-hidden" style={{ overflowAnchor: 'none' }}>
           <AnimatePresence mode="wait">
             <motion.section 
               key={`${activeIndex}-${lang}`} 
