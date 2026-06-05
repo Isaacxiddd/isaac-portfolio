@@ -102,6 +102,18 @@ h1, h2, h3, h4, h5, h6 {
 /* firefox */
 * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
 
+/* scrollbar verde en tema oscuro */
+html[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(14,165,255,0.35), rgba(14,165,255,0.15));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(14,165,255,0.55);
+}
+html[data-theme="dark"] * { scrollbar-color: rgba(14,165,255,0.3) transparent; }
+
 /* =========================
    Accesibilidad focus
    ========================= */
