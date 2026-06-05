@@ -1119,7 +1119,7 @@ const AboutSection: React.FC<{
           <motion.div variants={fadeUp} className="md:w-1/3 flex flex-col items-center md:items-end justify-center">
             <picture>
               <source srcSet="/avatar.webp" type="image/webp" />
-              <img src="/avatar.jpg" alt="avatar" width={200} height={200} fetchPriority="high" className="w-full max-w-[200px] rounded-xl object-cover border border-cyberaccent/30 shadow-lg mb-4" />
+              <img src="/avatar.jpg" alt="avatar" width={417} height={417} fetchPriority="high" className="w-full max-w-[200px] rounded-xl object-cover border border-cyberaccent/30 shadow-lg mb-4" />
             </picture>
           </motion.div>
         </motion.div>
@@ -1512,8 +1512,9 @@ const ContactSection: React.FC<{
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs opacity-70 mb-1">{translations.formName}</label>
+                  <label htmlFor="contact-name" className="block text-xs opacity-70 mb-1">{translations.formName}</label>
                   <input
+                    id="contact-name"
                     type="text"
                     required
                     value={formData.name}
@@ -1523,8 +1524,9 @@ const ContactSection: React.FC<{
                   />
                 </div>
                 <div>
-                  <label className="block text-xs opacity-70 mb-1">{translations.formEmail}</label>
+                  <label htmlFor="contact-email" className="block text-xs opacity-70 mb-1">{translations.formEmail}</label>
                   <input
+                    id="contact-email"
                     type="email"
                     required
                     value={formData.email}
@@ -1535,8 +1537,9 @@ const ContactSection: React.FC<{
                 </div>
               </div>
               <div>
-                <label className="block text-xs opacity-70 mb-1">{translations.formMessage}</label>
+                <label htmlFor="contact-message" className="block text-xs opacity-70 mb-1">{translations.formMessage}</label>
                 <textarea
+                  id="contact-message"
                   required
                   rows={4}
                   value={formData.message}
