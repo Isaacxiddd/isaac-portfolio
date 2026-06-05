@@ -1342,7 +1342,7 @@ const TechnologiesSection = React.memo(({ translations, lang, techRepo }: {
       <SectionTitle>{translations.techTitle}</SectionTitle>
       <motion.div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.08 } } }}>
         <motion.div variants={fadeUp}>
-          <div className="mb-6 text-lg font-semibold text-cyberaccent text-center">{translations.mastered}</div>
+          <div className="mb-6 text-lg font-semibold text-cyberaccent text-center mastered-label">{translations.mastered}</div>
           <motion.div className="flex flex-wrap gap-4 justify-center" initial="hidden" animate="visible" variants={staggerPills}>
             {masteredTechs.map((tech) => (
               <TechPill
