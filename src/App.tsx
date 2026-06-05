@@ -1305,8 +1305,8 @@ const ProjectsSection = React.memo(({ translations, lang, projectRepo }: {
               )}
 
               <div className="pt-4 border-t border-gray-700 text-center">
-                <a href={selectedProject.url} target="_blank" rel="noreferrer" className="inline-block px-6 py-3 border border-cyberaccent/50 rounded bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
-                  {lang === "es" ? "🚀 Visitar proyecto" : "🚀 Visit project"}
+                <a href={selectedProject.url} target="_blank" rel="noreferrer" className="inline-block px-6 py-3 border border-cyberaccent/50 rounded text-cyberaccent hover:bg-cyberaccent/10 transition-all transform hover:scale-105">
+                  {lang === "es" ? "Visitar proyecto" : "Visit project"}
                 </a>
               </div>
             </div>

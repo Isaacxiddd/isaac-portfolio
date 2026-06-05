@@ -558,12 +558,6 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
   color: #1a3a6b !important;
 }
 
-/* Gradient visit-project button stays readable */
-[data-theme="ps3"] .from-blue-600.to-purple-600 {
-  color: #ffffff !important;
-}
-[data-theme="ps3"] a.from-blue-600,
-[data-theme="ps3"] .bg-gradient-to-r .text-teal-700 { color: inherit !important; }
 
 /* Project category badge (has bg-white/20 + text-white): keep white */
 [data-theme="ps3"] .bg-white\/20.text-white,
