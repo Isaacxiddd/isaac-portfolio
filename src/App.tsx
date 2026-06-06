@@ -2,18 +2,18 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion";
 
 // Import images directly for reliable bundling
-import humanoiaPreview from "./assets/screenshots/humanoia-preview.png";
-import humanoia1 from "./assets/screenshots/humanoia-1.png";
-import humanoia2 from "./assets/screenshots/humanoia-2.png";
-import humanoia3 from "./assets/screenshots/humanoia-3.png";
-import formulafacil1 from "./assets/screenshots/formulafacil.png";
-import formulafacilUtn from "./assets/screenshots/formulafacil-utn.png";
-import formulafacilClassic from "./assets/screenshots/formulafacil-classic.png";
-import formulafacilPractice from "./assets/screenshots/formulafacil-practice.png";
-import certificadoImg from "./assets/screenshots/certificado.jpg";
-import reservationWorkflow from "./assets/screenshots/reservation-workflow.png";
-import reservationBitrix from "./assets/screenshots/reservation-bitrix.png";
-import reservationIntermedia from "./assets/screenshots/reservation-intermedia.png";
+import humanoiaPreview from "./assets/screenshots/humanoia-preview.webp";
+import humanoia1 from "./assets/screenshots/humanoia-1.webp";
+import humanoia2 from "./assets/screenshots/humanoia-2.webp";
+import humanoia3 from "./assets/screenshots/humanoia-3.webp";
+import formulafacil1 from "./assets/screenshots/formulafacil.webp";
+import formulafacilUtn from "./assets/screenshots/formulafacil-utn.webp";
+import formulafacilClassic from "./assets/screenshots/formulafacil-classic.webp";
+import formulafacilPractice from "./assets/screenshots/formulafacil-practice.webp";
+import certificadoImg from "./assets/screenshots/certificado.webp";
+import reservationWorkflow from "./assets/screenshots/reservation-workflow.webp";
+import reservationBitrix from "./assets/screenshots/reservation-bitrix.webp";
+import reservationIntermedia from "./assets/screenshots/reservation-intermedia.webp";
 
 // ========================= TIPOS =========================
 
@@ -1061,14 +1061,14 @@ const AboutSection: React.FC<{
   return (
     <div>
       <SectionTitle>{translations.aboutTitle}</SectionTitle>
-      <div className="bg-black/20 backdrop-blur-[2px] p-6 rounded-xl border border-cyberaccent/30">
-        <motion.div className="flex flex-col md:flex-row gap-6 items-center md:items-start" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
+      <div className="bg-black/20 backdrop-blur-[2px] p-10 rounded-xl border border-cyberaccent/30">
+        <motion.div className="flex flex-col md:flex-row gap-8 items-center md:items-start" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
           <div className="md:w-2/3">
-            <motion.div variants={fadeUp} className="text-xl font-semibold mb-4 text-cyberaccent">Isaac José García Márquez</motion.div>
-            <motion.div variants={fadeUp} className="text-sm font-semibold mb-4 text-cyan-400">
+            <motion.div variants={fadeUp} className="text-2xl font-semibold mb-4 text-cyberaccent">Isaac José García Márquez</motion.div>
+            <motion.div variants={fadeUp} className="text-base font-semibold mb-4 text-cyan-400">
               {translations.developer}
             </motion.div>
-            <motion.p variants={fadeUp} className="text-[14px] leading-6 text-gray-200 mb-6">
+            <motion.p variants={fadeUp} className="text-[16px] leading-7 text-gray-200 mb-6">
               {lang === "es"
                 ? "Estudiante de Ingeniería en Sistemas. Construyo aplicaciones web y soluciones de automatización con foco en backend, integración de sistemas y resolución de problemas mediante software."
                 : "Systems Engineering student. I build web applications and automation solutions focused on backend, systems integration, and problem-solving through software."
@@ -1714,9 +1714,20 @@ const Sidebar: React.FC<{
     </div>
 
     <nav aria-label="main menu" className="flex-1">
-      {translations.menu.map((label, i) => (
+      {([
+        // Quién soy / About Me
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>,
+        // Proyectos / Projects
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>,
+        // Tecnologías / Technologies
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
+        // Contacto / Contact
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>,
+        // Saber más / Learn More
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>,
+      ] as React.ReactNode[]).map((icon, i) => (
         <button
-          key={label}
+          key={translations.menu[i]}
           onClick={() => onMenuClick(i)}
           className={`btn-star w-full text-left p-3 my-2 rounded transition-all relative ${
             i === activeIndex
@@ -1725,10 +1736,11 @@ const Sidebar: React.FC<{
           }`}
         >
           {i === activeIndex && (
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-6 bg-cyberaccent rounded-full shadow-[0_0_8px_rgba(14,165,255,0.6)]"></div>
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-[85%] bg-cyberaccent rounded-full shadow-[0_0_8px_rgba(14,165,255,0.6)]"></div>
           )}
-          <div className="text-[11px] opacity-80 ml-2">
-            {label}
+          <div className="flex items-center gap-2 ml-2">
+            <span className={`shrink-0 ${i === activeIndex ? "opacity-100" : "opacity-60"}`}>{icon}</span>
+            <span className="text-[12px] opacity-80">{translations.menu[i]}</span>
           </div>
         </button>
       ))}
@@ -1982,13 +1994,13 @@ export default function OptimizedPortfolio(): JSX.Element {
       <main ref={mainRef} className="flex-1 flex flex-col relative z-[1]">
         <div ref={scrollContainerRef} className="flex-1 p-6 overflow-y-auto overflow-x-hidden" style={{ overflowAnchor: 'none' }}>
           <AnimatePresence mode="wait">
-            <motion.section 
-              key={`${activeIndex}-${lang}`} 
-              initial="initial" 
-              animate="enter" 
-              exit="exit" 
-              variants={variants} 
-              className="max-w-5xl mx-auto" 
+            <motion.section
+              key={`${activeIndex}-${lang}`}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+              variants={variants}
+              className="max-w-5xl mx-auto"
               role="main"
             >
               <ContentRenderer
