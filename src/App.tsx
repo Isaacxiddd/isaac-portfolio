@@ -1626,17 +1626,23 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
   const animatedHits = useAnimatedCounter(stats?.hits ?? 0);
 
   useEffect(() => {
-    fetch('/api/neocities-info')
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
-        if (data?.info) {
-          setStats({ views: data.info.views, hits: data.info.hits });
-        }
-      })
-      .catch(() => {});
+    const loadStats = (url: string) =>
+      fetch(url)
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+        .then(data => {
+          if (data?.info) {
+            setStats({ views: data.info.views, hits: data.info.hits });
+            return true;
+          }
+          return false;
+        });
+
+    loadStats('/api/neocities-info').catch(() => {
+      loadStats('/neocities-fallback.json');
+    });
   }, []);
 
   const fmt = (n: number) => n.toLocaleString(lang === 'es' ? 'es-ES' : 'en-US');
