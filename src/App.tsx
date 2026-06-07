@@ -1589,10 +1589,59 @@ const ContactSection: React.FC<{
   );
 };
 
+function useAnimatedCounter(target: number, duration: number = 2500): number {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (target <= 0) return;
+
+    const startTime = performance.now();
+    let rafId: number;
+
+    const animate = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.floor(eased * target));
+
+      if (progress < 1) {
+        rafId = requestAnimationFrame(animate);
+      }
+    };
+
+    rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
+  }, [target, duration]);
+
+  return value;
+}
+
 const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = ({ translations, lang }) => {
   const interests = lang === "es"
     ? ["Desarrollo full stack", "APIs e integración de sistemas", "Automatización de procesos", "Arquitectura de software", "Herramientas de IA para desarrollo"]
     : ["Full stack development", "APIs & system integration", "Process automation", "Software architecture", "AI tools for development"];
+
+  const [stats, setStats] = useState<{ views: number; hits: number } | null>(null);
+  const animatedViews = useAnimatedCounter(stats?.views ?? 0);
+  const animatedHits = useAnimatedCounter(stats?.hits ?? 0);
+
+  useEffect(() => {
+    fetch('/api/neocities-info')
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        if (data?.info) {
+          setStats({ views: data.info.views, hits: data.info.hits });
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const fmt = (n: number) => n.toLocaleString(lang === 'es' ? 'es-ES' : 'en-US');
+  const formattedViews = stats !== null ? fmt(animatedViews) : '...';
+  const formattedHits = stats !== null ? fmt(animatedHits) : '...';
 
   return (
     <div>
@@ -1635,10 +1684,18 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
             </div>
           </div>
 
-          {/* Stat usuarios */}
-          <div className="btn-shine p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center">
-            <div className="text-3xl font-bold text-amber-400">+3.000</div>
-            <div className="text-xs text-gray-400 mt-1">{lang === "es" ? "usuarios alcanzados con proyectos propios" : "users reached through own projects"}</div>
+          {/* Stats */}
+          <div className="btn-shine p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl text-center space-y-3">
+            <div className="text-xs font-semibold text-cyberaccent uppercase tracking-wider">{lang === "es" ? "Proyectos alcanzando más de" : "Projects reaching over"}</div>
+            <div>
+              <div className="text-3xl font-bold text-amber-400">+{formattedViews}</div>
+              <div className="text-xs text-gray-400">{lang === "es" ? "visitas" : "visits"}</div>
+            </div>
+            <div className="w-3/4 mx-auto h-px bg-cyberaccent/20" />
+            <div>
+              <div className="text-3xl font-bold text-amber-400">+{formattedHits}</div>
+              <div className="text-xs text-gray-400">{lang === "es" ? "usos" : "uses"}</div>
+            </div>
           </div>
 
           {/* Intereses */}
