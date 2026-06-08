@@ -25,7 +25,7 @@ const Sidebar: React.FC<{
   <aside className="w-72 p-4 border-r border-cyberaccent/30 hidden md:flex flex-col gap-6 bg-black/20 backdrop-blur-sm relative z-[1]">
     <div className="flex items-center gap-2">
       <div className="text-lg font-semibold text-cyberaccent leading-4 overflow-hidden whitespace-nowrap">
-        {lang === "es" ? "Portafolio" : "Portfolio"}
+        ~/isaac
       </div>
       <button
         aria-label="toggle-language"
