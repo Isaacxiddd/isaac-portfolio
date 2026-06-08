@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from "react";
-import { ProjectRepository, TechnologyRepository } from "../App"; // Ajusta el import según tu estructura
+import { ProjectRepository } from "../repositories/ProjectRepository";
+import { TechnologyRepository } from "../repositories/TechnologyRepository";
 
 const AppRepositoriesContext = createContext<{
   projectRepo: ProjectRepository;
