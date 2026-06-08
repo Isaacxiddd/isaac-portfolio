@@ -1054,10 +1054,11 @@ const RotatingImage: React.FC<{ project: Project; alt: string; paused: boolean }
 // ========================= SECCIONES =========================
 
 const AboutSection: React.FC<{ 
-  translations: Translations; 
+  translations: Translations;
   lang: Lang;
-  onSetActive: (i: number) => void;
-}> = ({ translations, lang, onSetActive }) => {
+  theme: Theme;
+  onSetActive: (index: number) => void;
+}> = ({ translations, lang, theme, onSetActive }) => {
   return (
     <div>
       <SectionTitle>{translations.aboutTitle}</SectionTitle>
@@ -1065,7 +1066,7 @@ const AboutSection: React.FC<{
         <motion.div className="flex flex-col md:flex-row gap-8 items-center md:items-start" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
           <div className="md:w-2/3">
             <motion.div variants={fadeUp} className="text-2xl font-semibold mb-4 text-cyberaccent">Isaac José García Márquez</motion.div>
-            <motion.div variants={fadeUp} className="text-base font-semibold mb-4 text-cyan-400">
+            <motion.div variants={fadeUp} className={theme === 'ps3' ? 'text-base font-semibold mb-4 text-cyan-400' : 'text-sm font-normal mb-4 text-white/70 uppercase tracking-wider'}>
               {translations.developer}
             </motion.div>
             <motion.p variants={fadeUp} className="text-[16px] leading-7 text-gray-200 mb-6">
@@ -1078,31 +1079,58 @@ const AboutSection: React.FC<{
             <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-4">
               <button
                 onClick={AppConfig.openGitHub}
-                className="btn-shine inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-gray-500/50 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors"
+                className="btn-animated btn-gh"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                  <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
-                </svg>
-                GitHub
+                <span className="gh-cat">
+                  <svg width="18" height="18" viewBox="0 0 98 96" fill="#e2e8f0" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"/>
+                  </svg>
+                </span>
+                <div className="gh-label-wrap">
+                  <span className="gh-in">GitHub</span>
+                  <span className="gh-name">isaacxiddd</span>
+                </div>
               </button>
               <button
                 onClick={AppConfig.openLinkedIn}
-                className="btn-shine inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-cyberaccent/50 rounded-lg bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
+                className="btn-animated btn-li"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                  <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.93v5.68H9.35V9h3.42v1.56h.05c.48-.91 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51v6.23zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.13 20.45H3.55V9h3.58v11.45z" />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a66c2" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}>
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
-                LinkedIn
+                <div className="li-label-wrap">
+                  <span className="li-in">LinkedIn</span>
+                  <span className="li-name">isaacjosegarcia</span>
+                </div>
               </button>
               <a
                 href={lang === 'en' ? AppConfig.CV_PATH_EN : AppConfig.CV_PATH}
                 download
-                className="btn-shine inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border border-cyberaccent/50 rounded-lg bg-cyberaccent/20 hover:bg-cyberaccent/30 transition-colors"
+                className="btn-animated btn-dl"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                {lang === "es" ? "Descargar CV" : "Download CV"}
+                <div className="dl-default">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="9" y1="1.5" x2="9" y2="10" stroke="#e2e8f0" stroke-width="1.7" stroke-linecap="round"/>
+                    <polyline points="5.5,7.5 9,11.5 12.5,7.5" fill="none" stroke="#e2e8f0" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
+                    <polyline points="4,13.5 4,16 14,16 14,13.5" fill="none" stroke="#e2e8f0" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
+                  </svg>
+                  <span>{lang === "es" ? "Descargar CV" : "Download CV"}</span>
+                </div>
+                <div className="dl-loading">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="8" rx="2"/>
+                    <rect x="2" y="14" width="20" height="8" rx="2"/>
+                    <circle cx="6" cy="6" r="1.2" fill="rgba(255,255,255,0.8)" stroke="none"/>
+                    <circle cx="6" cy="18" r="1.2" fill="rgba(255,255,255,0.8)" stroke="none"/>
+                  </svg>
+                  <div className="dl-track">
+                    <div className="dl-fill"></div>
+                    <div className="dl-packet"></div>
+                  </div>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                  </svg>
+                </div>
               </a>
             </motion.div>
 
@@ -1831,14 +1859,15 @@ const ContentRenderer: React.FC<{
   activeIndex: number;
   translations: Translations;
   lang: Lang;
+  theme: Theme;
   projectRepo: ProjectRepository;
   techRepo: TechnologyRepository;
   onSetActive: (index: number) => void;
   onCopyEmail: () => void;
-}> = ({ activeIndex, translations, lang, projectRepo, techRepo, onSetActive, onCopyEmail }) => {
+}> = ({ activeIndex, translations, lang, theme, projectRepo, techRepo, onSetActive, onCopyEmail }) => {
   switch (activeIndex) {
     case 0: 
-      return <AboutSection translations={translations} lang={lang} onSetActive={onSetActive} />;
+      return <AboutSection translations={translations} lang={lang} theme={theme} onSetActive={onSetActive} />;
     case 1: 
       return <ProjectsSection translations={translations} lang={lang} projectRepo={projectRepo} />;
     case 2: 
@@ -1848,7 +1877,7 @@ const ContentRenderer: React.FC<{
     case 4: 
       return <LearnMoreSection translations={translations} lang={lang} />;
     default: 
-      return <AboutSection translations={translations} lang={lang} onSetActive={onSetActive} />;
+      return <AboutSection translations={translations} lang={lang} theme={theme} onSetActive={onSetActive} />;
   }
 };
 
@@ -2070,6 +2099,7 @@ export default function OptimizedPortfolio(): JSX.Element {
                 activeIndex={activeIndex}
                 translations={translations}
                 lang={lang}
+                theme={theme}
                 projectRepo={projectRepo}
                 techRepo={techRepo}
                 onSetActive={setActive}
