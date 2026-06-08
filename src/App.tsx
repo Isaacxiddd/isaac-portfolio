@@ -1136,8 +1136,7 @@ const AboutSection: React.FC<{
 
             <motion.div variants={fadeUp} className="flex items-center gap-3">
               <span
-                className="text-sm font-semibold text-yellow-400 cursor-pointer transition-all duration-300 hover:scale-110 hover:text-yellow-300 hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]"
-                style={{ animation: 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
+                className="explore-link text-sm font-semibold cursor-pointer inline-block"
                 onClick={() => onSetActive(1)}
               >
                 {lang === "es" ? "Explorar proyectos →" : "Explore projects →"}

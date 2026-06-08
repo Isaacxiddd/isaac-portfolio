@@ -677,13 +677,46 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
   text-shadow: 0 0 8px rgba(0, 85, 204, 0.6);
 }
 
+/* ─── Explorar proyectos — efecto flashero ─── */
+.explore-link {
+  background: linear-gradient(90deg, #facc15, #f97316, #facc15, #f97316);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: explore-shimmer 3s linear infinite;
+  text-shadow: none;
+  filter: drop-shadow(0 0 6px rgba(250,204,21,0.3));
+  transition: filter 0.3s, transform 0.3s;
+}
+.explore-link:hover {
+  filter: drop-shadow(0 0 14px rgba(250,204,21,0.7));
+  transform: scale(1.1);
+}
+@keyframes explore-shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+[data-theme="ps3"] .explore-link {
+  background: linear-gradient(90deg, #0044cc, #0066ff, #0044cc, #0066ff);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 6px rgba(0,68,204,0.3));
+}
+[data-theme="ps3"] .explore-link:hover {
+  filter: drop-shadow(0 0 14px rgba(0,68,204,0.7));
+}
+
 /* ─── Botones animados (GitHub, LinkedIn, Download) ─── */
 
 .btn-animated {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 6px 16px;
   border-radius: 0.5rem;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
@@ -696,6 +729,7 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
   overflow: hidden;
   text-decoration: none;
 }
+.btn-animated { min-width: 130px; }
 .btn-animated:hover { border-color: #4a9eff; box-shadow: 0 0 0 1px #4a9eff22; }
 
 /* ─── GITHUB ─── */
@@ -745,7 +779,6 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
 
 /* ─── LINKEDIN ─── */
 .btn-li {
-  min-width: 130px;
   color: #e2e8f0;
   background: rgba(0,120,255,0.12);
   border: 1.5px solid rgba(0,120,255,0.35);
@@ -774,7 +807,6 @@ html[data-theme="ps3"] * { scrollbar-color: rgba(0,80,200,0.2) transparent; }
 /* ─── DOWNLOAD ─── */
 .btn-dl {
   overflow: hidden;
-  min-width: 148px;
   color: #e2e8f0;
   background: rgba(0,120,255,0.12);
   border: 1.5px solid rgba(0,120,255,0.35);
