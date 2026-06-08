@@ -11,6 +11,10 @@ import formulafacilPractice from "../assets/screenshots/formulafacil-practice.we
 import reservationWorkflow from "../assets/screenshots/reservation-workflow.webp";
 import reservationIntermedia from "../assets/screenshots/reservation-intermedia.webp";
 import reservationBitrix from "../assets/screenshots/reservation-bitrix.webp";
+import cvAnalyzerBanner from "../assets/screenshots/cv-analyzer-banner.webp";
+import cvAnalyzerGood from "../assets/screenshots/cv-analyzer-good.webp";
+import cvAnalyzerMixed from "../assets/screenshots/cv-analyzer-mixed.webp";
+import cvAnalyzerBad from "../assets/screenshots/cv-analyzer-bad.webp";
 
 export class ProjectRepository {
   private projects: Project[] = [];
@@ -21,7 +25,7 @@ export class ProjectRepository {
 
   private initializeProjects(): void {
     const humanoiaProject = new Project(
-      "HumanoIA",
+      { es: "HumanoIA", en: "HumanoIA" },
       "https://humanoia.neocities.org",
       {
         es: "Juego para adivinar cuál cara es real y cuál fue generada por IA.",
@@ -33,7 +37,7 @@ export class ProjectRepository {
       },
       "HTML • CSS • JavaScript",
       humanoiaPreview,
-      [humanoia1, humanoia2, humanoia3],
+      [],
       {
         es: ["Interfaz intuitiva y responsive", "Sistema de puntuación en tiempo real", "Diferentes niveles de dificultad"],
         en: ["Intuitive and responsive interface", "Real-time scoring system", "Different difficulty levels"]
@@ -45,15 +49,16 @@ export class ProjectRepository {
       "Frontend",
       "from-purple-500 to-pink-500",
       "🎮",
-      "https://github.com/Isaacxiddd/HumanoIA"
+      "https://github.com/Isaacxiddd/HumanoIA",
+      [humanoia1, humanoia2, humanoia3]
     );
 
     const formulaFacilProject = new Project(
-      "Formula Fácil UTN",
+      { es: "Formula Fácil UTN", en: "Formula Fácil UTN" },
       "https://formulafacilutn.neocities.org",
       {
-        es: "Herramienta educativa para estudiantes de la UTN con más de 3.000 usuarios. Memorización de fórmulas matemáticas mediante gamificación y práctica activa.",
-        en: "Educational tool for UTN students with over 3,000 users. Mathematical formula memorization through gamification and active practice."
+        es: "Los estudiantes de la UTN necesitaban memorizar decenas de fórmulas matemáticas pero no había una forma práctica y entretenida de hacerlo. Esta herramienta convierte el estudio en un juego interactivo con más de 3.000 usuarios.",
+        en: "UTN students needed to memorize dozens of mathematical formulas but had no practical, engaging way to do it. This tool turns studying into an interactive game with over 3,000 users."
       },
       {
         es: "Herramienta educativa interactiva creada para estudiantes de la UTN que ayuda a memorizar fórmulas matemáticas mediante técnicas de gamificación y práctica activa.\n\nLa plataforma alcanzó más de 3.000 usuarios y fue utilizada por estudiantes para reforzar contenidos de Análisis Matemático y Geometría, combinando aprendizaje visual, ejercicios interactivos y seguimiento del progreso.\n\nDesarrollada íntegramente con HTML, CSS y JavaScript, incorpora renderizado matemático con MathJax, gráficos SVG dinámicos y un sistema de puntuación y rachas en tiempo real para mejorar la retención de conceptos.",
@@ -61,7 +66,7 @@ export class ProjectRepository {
       },
       "HTML5 • CSS3 • JavaScript • MathJax • SVG",
       formulafacil1,
-      [formulafacilUtn, formulafacilClassic, formulafacilPractice],
+      [],
       {
         es: [
           "+3.000 usuarios alcanzados en 2026",
@@ -97,38 +102,41 @@ export class ProjectRepository {
       "Frontend",
       "from-teal-600 to-blue-600",
       "🎮",
-      "https://github.com/Isaacxiddd/FormulafacilUTN"
+      "https://github.com/Isaacxiddd/FormulafacilUTN",
+      [formulafacilUtn, formulafacilClassic, formulafacilPractice]
     );
 
     const reservationProject = new Project(
-      "Automatización de Reservas",
+      { es: "Reservation Automation — Proyecto Técnico para Gouppers", en: "Reservation Automation — Technical Project for Gouppers" },
       "https://github.com/Isaacxiddd/Reservation-automation",
       {
-        es: "Sistema de automatización que conecta reservas de Airbnb/Booking con el CRM Bitrix24 usando n8n.",
-        en: "Automation system that connects Airbnb/Booking reservations with Bitrix24 CRM using n8n."
+        es: "Las reservas de Airbnb y Booking llegaban por email y alguien tenía que copiarlas manualmente a Bitrix24. Este sistema automatiza todo el proceso.",
+        en: "Airbnb and Booking reservations arrived by email and someone had to manually enter them into Bitrix24. This system automates the entire process."
       },
       {
-        es: "Sistema de automatización que procesa correos de confirmación de Airbnb y Booking.com vía IMAP, clasifica el tipo de evento (nueva reserva, cancelación, mensaje, reseña), extrae los datos del huésped y la propiedad, y los registra automáticamente como deals en Bitrix24. Incluye validación anti-duplicados con PostgreSQL/Supabase y lógica de fallback: si no encuentra la propiedad, crea el deal igual y genera una tarea manual para intervención.",
-        en: "Automation system that processes Airbnb and Booking.com confirmation emails via IMAP, classifies event types (new booking, cancellation, message, review), extracts guest and property data, and automatically registers them as deals in Bitrix24. Includes anti-duplication validation with PostgreSQL/Supabase and fallback logic: if the property isn't found, it still creates the deal and generates a manual task for intervention."
+        es: "Technical Project for Gouppers.\n\nSistema de automatización que procesa correos de confirmación de Airbnb y Booking.com vía IMAP, clasifica el tipo de evento (nueva reserva, cancelación, mensaje, reseña), extrae los datos del huésped y la propiedad, y los registra automáticamente como deals en Bitrix24. Incluye validación anti-duplicados con PostgreSQL/Supabase y lógica de fallback: si no encuentra la propiedad, crea el deal igual y genera una tarea manual para intervención.\n\nEl proyecto surgió de un problema real: las reservas llegaban por email y alguien tenía que cargarlas manualmente en Bitrix24. La arquitectura se construyó incrementalmente respondiendo a issues de operación: duplicados, property matching, fallos silenciosos y observabilidad.",
+        en: "Technical Project for Gouppers.\n\nAutomation system that processes Airbnb and Booking.com confirmation emails via IMAP, classifies event types (new booking, cancellation, message, review), extracts guest and property data, and automatically registers them as deals in Bitrix24. Includes anti-duplication validation with PostgreSQL/Supabase and fallback logic: if the property isn't found, it still creates the deal and generates a manual task for intervention.\n\nThe project came from a real problem: reservations arrived by email and someone had to manually enter them into Bitrix24. The architecture was built incrementally responding to real operational issues: duplicates, property matching, silent failures, and observability."
       },
-      "n8n • Bitrix24 API • PostgreSQL • Supabase • JavaScript • IMAP",
+      "n8n • Bitrix24 API • PostgreSQL • Supabase • JavaScript • IMAP • Git",
       reservationWorkflow,
-      [reservationWorkflow, reservationIntermedia, reservationBitrix],
+      [],
       {
         es: [
+          "Technical Project for Gouppers (empresa real de administración de propiedades)",
           "Lectura de emails de confirmación vía IMAP (Airbnb y Booking)",
           "Clasificación automática del tipo de evento",
           "Extracción de datos: huésped, propiedad, fechas, código de confirmación",
           "Creación automática de deals en Bitrix24 con tareas vinculadas",
-          "Validación anti-duplicados con base de datos PostgreSQL/Supabase",
+          "Validación anti-duplicados en 2 capas (PostgreSQL + API Bitrix24)",
           "Fallback resiliente: crea el deal aunque falle el matching de propiedad"
         ],
         en: [
+          "Technical Project for Gouppers (real property management company)",
           "Confirmation email reading via IMAP (Airbnb and Booking)",
           "Automatic classification of event type",
           "Data extraction: guest, property, dates, confirmation code",
           "Automatic deal creation in Bitrix24 with linked tasks",
-          "Anti-duplication validation with PostgreSQL/Supabase database",
+          "2-layer anti-duplication validation (PostgreSQL + Bitrix24 API)",
           "Resilient fallback: creates the deal even if property matching fails"
         ]
       },
@@ -136,20 +144,75 @@ export class ProjectRepository {
         es: [
           "Diseño de lógica de fallback para evitar pérdida de reservas ante fallas de matching",
           "Implementación de índice anti-duplicados persistente en Supabase",
-          "Parsing robusto de emails con múltiples formatos de Airbnb y Booking"
+          "Parsing robusto de emails con múltiples formatos de Airbnb y Booking",
+          "Observabilidad: heartbeat, logs de auditoría y notificaciones de error"
         ],
         en: [
           "Fallback logic design to avoid losing reservations on matching failures",
           "Implementation of persistent anti-duplication index in Supabase",
-          "Robust email parsing handling multiple formats from Airbnb and Booking"
+          "Robust email parsing handling multiple formats from Airbnb and Booking",
+          "Observability: heartbeat, audit logs, and error notifications"
         ]
       },
       "Automatización",
       "from-orange-500 to-amber-600",
-      "⚡"
+      "⚡",
+      undefined,
+      [reservationWorkflow, reservationIntermedia, reservationBitrix]
     );
 
-    this.projects.push(formulaFacilProject, reservationProject, humanoiaProject);
+    const cvAnalyzerProject = new Project(
+      { es: "CVs con GitHub", en: "CV ↔ GitHub Analyzer" },
+      "https://github.com/Isaacxiddd/cv_github_analyzer",
+      {
+        es: "Verificar CVs con GitHub era un proceso manual, lento e inconsistente. Esta extensión automatiza todo en local.",
+        en: "Recruiters manually checked CVs against GitHub — slow and inconsistent. This Chrome extension automates cross-checking without uploading documents."
+      },
+      {
+        es: "Extensión de Chrome que compara un CV en PDF con un perfil de GitHub y detecta inconsistencias, evidencia faltante y señales de calidad de repositorios — todo en local, sin enviar nada a servidores externos.\n\nEl problema: los reclutadores necesitan determinar si lo que dice un CV coincide con la actividad real de GitHub. Hacerlo a mano es lento, inconsistente y no escala. Ejemplos típicos: \"Experto en React\" sin repos públicos de React, \"5 años de Python\" con pocos commits, skills sin proyectos que las respalden.\n\nLa solución: la extensión procesa el PDF, extrae skills y fechas, consulta el perfil de GitHub, analiza repos y actividad, compara los claims con la evidencia y genera un reporte claro.",
+        en: "A Chrome extension that cross-checks a PDF CV against a GitHub profile and highlights inconsistencies, missing evidence, and repository quality signals — entirely inside the browser, without uploading documents to external servers.\n\nThe problem: recruiters need to determine whether CV information is backed by public technical evidence. The process is manual, inconsistent, and time-consuming. Common examples: \"Expert in React\" with no visible React repositories, \"5 years of Python experience\" with no supporting GitHub activity, skills listed without projects that demonstrate them.\n\nThe solution: the extension parses the PDF, extracts skills, dates and technical claims, fetches public GitHub profile data, analyzes repositories and activity, cross-checks claims against evidence, and generates a report with transparent findings."
+      },
+      "TypeScript • Chrome Extension (MV3) • pdf.js • esbuild • Vitest",
+      cvAnalyzerBanner,
+      [],
+      {
+        es: [
+          "Parseo de CV en PDF con extracción de skills, fechas y enlaces",
+          "Análisis de perfil público de GitHub (repos, lenguajes, actividad)",
+          "Motor de verificación cruzada: skills, experiencia, calidad de repos",
+          "Procesamiento 100% local — el CV nunca sale del navegador",
+          "Reporte con hallazgos transparentes: ✅ verificado, 🟡 dudoso, 🔴 sin evidencia"
+        ],
+        en: [
+          "PDF CV parsing with extraction of skills, dates and links",
+          "Public GitHub profile analysis (repos, languages, activity)",
+          "Cross-check engine: skills, experience, repo quality",
+          "100% local processing — CV never leaves the browser",
+          "Report with transparent findings: ✅ verified, 🟡 uncertain, 🔴 no evidence"
+        ]
+      },
+      {
+        es: [
+          "Diseño de motor de reglas genérico para verificación de claims",
+          "Implementación del pipeline completo: PDF → extracción → análisis → reporte",
+          "Manejo de distintos formatos de CV sin estructura fija",
+          "Arquitectura modular extensible para nuevas reglas de verificación"
+        ],
+        en: [
+          "Design of generic rule engine for claim verification",
+          "Full pipeline implementation: PDF → extraction → analysis → report",
+          "Handling different CV formats without fixed structure",
+          "Extensible modular architecture for new verification rules"
+        ]
+      },
+      "Herramientas",
+      "from-blue-600 to-cyan-500",
+      "🔍",
+      undefined,
+      [cvAnalyzerGood, cvAnalyzerMixed, cvAnalyzerBad]
+    );
+
+    this.projects.push(formulaFacilProject, reservationProject, humanoiaProject, cvAnalyzerProject);
   }
 
   getAllProjects(): Project[] {
@@ -157,6 +220,6 @@ export class ProjectRepository {
   }
 
   getProjectByName(name: string): Project | undefined {
-    return this.projects.find(project => project.name === name);
+    return this.projects.find(project => project.name.es === name || project.name.en === name);
   }
 }

@@ -20,7 +20,8 @@ const Sidebar: React.FC<{
   onCopyEmail: () => void;
   theme: Theme;
   onThemeToggle: () => void;
-}> = ({ translations, lang, activeIndex, onMenuClick, onLanguageToggle, onCopyEmail, theme, onThemeToggle }) => (
+  onTerminalToggle?: () => void;
+}> = ({ translations, lang, activeIndex, onMenuClick, onLanguageToggle, onCopyEmail, theme, onThemeToggle, onTerminalToggle }) => (
   <aside className="w-72 p-4 border-r border-cyberaccent/30 hidden md:flex flex-col gap-6 bg-black/20 backdrop-blur-sm relative z-[1]">
     <div className="flex items-center gap-2">
       <div className="text-lg font-semibold text-cyberaccent leading-4 overflow-hidden whitespace-nowrap">
@@ -69,6 +70,13 @@ const Sidebar: React.FC<{
     </nav>
 
     <div className="flex flex-col gap-2">
+      <button
+        onClick={onTerminalToggle}
+        className="px-3 py-2 text-xs border border-cyberaccent/40 rounded hover:bg-cyberaccent/20 transition-colors font-['JetBrains_Mono','Fira_Code','Cascadia_Code','Consolas',monospace]"
+
+      >
+        {'>_'} Terminal
+      </button>
       <a
         href={lang === 'en' ? AppConfig.CV_PATH_EN : AppConfig.CV_PATH}
         download

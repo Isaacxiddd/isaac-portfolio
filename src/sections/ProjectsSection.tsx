@@ -6,6 +6,7 @@ import Project from "../models/Project";
 import { ProjectRepository } from "../repositories/ProjectRepository";
 import SectionTitle from "../components/SectionTitle";
 import RotatingImage from "../components/RotatingImage";
+import ImageGallery from "../components/ImageGallery";
 import Modal from "../components/Modal";
 import { fadeUp, staggerGrid } from "../lib/animations";
 
@@ -52,13 +53,13 @@ const ProjectsSection = React.memo(({ translations, lang, projectRepo }: {
               </div>
 
               <div className="relative h-48 overflow-hidden flex-shrink-0">
-                <RotatingImage project={project} alt={`Preview de ${project.name}`} paused={hoveredIndex === index} />
+                <RotatingImage project={project} alt={`Preview de ${project.getName(lang)}`} paused={hoveredIndex === index} />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
               </div>
 
               <div className="p-6 flex flex-col flex-1">
                 <div className="mb-4">
-                  <h3 className="text-2xl font-bold text-white mb-2">{project.name}</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">{project.getName(lang)}</h3>
                   <p className="text-white/90 text-sm leading-relaxed">
                     {project.getDescription(lang)}
                   </p>
@@ -130,7 +131,7 @@ const ProjectsSection = React.memo(({ translations, lang, projectRepo }: {
         {selectedProject && (
           <>
             <div className="sticky top-0 bg-gray-900 p-4 border-b border-gray-700 flex justify-between items-center">
-              <h2 className="text-xl font-bold">{selectedProject.name}</h2>
+              <h2 className="text-xl font-bold">{selectedProject.getName(lang)}</h2>
             </div>
 
             <div className="p-6">
@@ -144,16 +145,10 @@ const ProjectsSection = React.memo(({ translations, lang, projectRepo }: {
                 <div className="text-sm bg-gray-800 px-3 py-2 rounded border border-gray-600 inline-block">{selectedProject.tech}</div>
               </div>
 
-              {selectedProject.images.length > 0 && (
+              {selectedProject.galleryImages.length > 0 && (
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-2">{lang === "es" ? "Capturas de pantalla" : "Screenshots"}</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {selectedProject.images.map((image, index) => (
-                      <div key={index} className="border border-gray-600 overflow-hidden rounded">
-                        <img src={image} alt={`${selectedProject.name} screenshot ${index + 1}`} loading="lazy" decoding="async" className="w-full h-48 object-cover hover:scale-105 transition-transform" />
-                      </div>
-                    ))}
-                  </div>
+                  <ImageGallery images={selectedProject.galleryImages} projectName={selectedProject.getName(lang)} />
                 </div>
               )}
 

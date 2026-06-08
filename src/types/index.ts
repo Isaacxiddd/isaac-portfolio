@@ -33,6 +33,14 @@ export interface Translations {
   formPlaceholderMessage: string;
 }
 
+export interface TerminalEntry {
+  input: string;
+  output: string;
+  typedLength: number;
+  isTyping: boolean;
+  id: number;
+}
+
 export interface TechDetail {
   name: string;
   logo: string;

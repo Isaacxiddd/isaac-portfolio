@@ -16,6 +16,7 @@ import PS3Ribbons from "./components/PS3Ribbons";
 import Sidebar from "./components/Sidebar";
 import ContentRenderer from "./components/ContentRenderer";
 import Footer from "./components/Footer";
+import TerminalConsole from "./components/TerminalConsole";
 
 // ========================= COMPONENTE PRINCIPAL =========================
 
@@ -23,13 +24,39 @@ export default function OptimizedPortfolio(): JSX.Element {
   const { activeIndex, setActive, next, previous } = useNavigation();
   const { lang, translations, toggleLanguage } = useTranslations();
   const reducedMotion = usePrefersReducedMotion();
-  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem('theme') as Theme) || 'ps3');
+  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem('theme') as Theme) || 'dark');
   const toggleTheme = useCallback(() => setTheme(t => {
     const next = t === 'dark' ? 'ps3' : 'dark';
     localStorage.setItem('theme', next);
     return next;
   }), []);
   const { toast, ToastNode } = useToast(theme);
+
+  const [terminalOpen, setTerminalOpen] = useState(false);
+  const toggleTerminal = useCallback(() => setTerminalOpen(v => !v), []);
+  const closeTerminal = useCallback(() => setTerminalOpen(false), []);
+
+  const openUrl = useCallback((url: string) => window.open(url, '_blank', 'noopener'), []);
+
+  const downloadCV = useCallback(() => {
+    const link = document.createElement('a');
+    link.href = lang === 'en' ? AppConfig.CV_PATH_EN : AppConfig.CV_PATH;
+    link.download = '';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, [lang]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === '`' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        toggleTerminal();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [toggleTerminal]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -196,6 +223,7 @@ export default function OptimizedPortfolio(): JSX.Element {
         onCopyEmail={copyEmail}
         theme={theme}
         onThemeToggle={toggleTheme}
+        onTerminalToggle={toggleTerminal}
       />
 
       {/* Mobile theme toggle */}
@@ -238,6 +266,20 @@ export default function OptimizedPortfolio(): JSX.Element {
         </div>
         <Footer />
       </main>
+
+      {/* Terminal (lazy-mount: solo existe en DOM cuando se abre) */}
+      {terminalOpen && (
+        <TerminalConsole
+          lang={lang}
+          translations={translations}
+          projectRepo={projectRepo}
+          techRepo={techRepo}
+          theme={theme}
+          onClose={closeTerminal}
+          onOpenUrl={openUrl}
+          onDownloadCV={downloadCV}
+        />
+      )}
 
       {/* Toast */}
       <ToastNode />
