@@ -13,9 +13,8 @@ export interface TerminalContext {
   onClose: () => void;
   onOpenUrl: (url: string) => void;
   onDownloadCV: () => void;
+  onBocaToggle?: () => void;
 }
-
-const PROMPT = "isaac@portfolio:~$ ";
 
 const WELCOME_ES = `Bienvenido a la terminal interactiva de Isaac.
 Escribí 'help' para ver los comandos disponibles.`;
@@ -37,7 +36,11 @@ export default function useTerminal(context: TerminalContext) {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isTyping, setIsTyping] = useState(false);
   const idCounter = useRef(1);
-  const openTime = useRef(Date.now());
+  const openTime = useRef(0);
+  useEffect(() => { openTime.current = Date.now(); }, []);
+
+  const bocaToggleRef = useRef(context.onBocaToggle);
+  bocaToggleRef.current = context.onBocaToggle;
 
   const reduceMotion = typeof window !== 'undefined'
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -93,7 +96,7 @@ export default function useTerminal(context: TerminalContext) {
   }, []);
 
   const getDynamicResponse = useCallback((cmdName: string, _args: string[], ctx: TerminalContext): string => {
-    const { lang, translations, projectRepo, techRepo, theme } = ctx;
+    const { lang, translations, projectRepo, techRepo } = ctx;
 
     switch (cmdName) {
       case 'about':
@@ -246,6 +249,20 @@ export default function useTerminal(context: TerminalContext) {
       return { output, onComplete: context.onDownloadCV };
     }
 
+    if (cmdName === 'boca') {
+      bocaToggleRef.current?.();
+      const isBoca = document.documentElement.classList.contains('boca-mode');
+      return {
+        output: isBoca
+          ? (context.lang === 'es'
+            ? '¡Modo Boca activado!\n\nDale Boca dale...\n\nEscribí /boca de nuevo para desactivar.'
+            : 'Boca mode activated!\n\nLet\'s go Boca...\n\nType /boca again to deactivate.')
+          : (context.lang === 'es'
+            ? 'Modo Boca desactivado. Volviendo a la normalidad...'
+            : 'Boca mode deactivated. Returning to normal...')
+      };
+    }
+
     const staticCmd = staticCommands.find(c => c.name === cmdName);
     if (staticCmd) {
       const resp = getStaticResponse(staticCmd, args, context.lang);
@@ -334,6 +351,7 @@ export default function useTerminal(context: TerminalContext) {
   }, [inputValue, cmdHistory, historyIndex, submitCommand, context]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEntries([
       {
         id: 0,

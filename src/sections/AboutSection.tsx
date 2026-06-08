@@ -23,7 +23,7 @@ const AboutSection: React.FC<{
             </motion.div>
             <motion.p variants={fadeUp} className="text-[16px] leading-7 text-gray-200 mb-6">
               {lang === "es"
-                ? "Estudiante de Ingeniería en Sistemas. Construyo aplicaciones web y soluciones de automatización con foco en backend, integración de sistemas y resolución de problemas mediante software."
+                ? "Construyo aplicaciones web, herramientas de automatización e integraciones entre sistemas. Me enfoco en desarrollar soluciones que resuelvan problemas reales mediante software."
                 : "Systems Engineering student. I build web applications and automation solutions focused on backend, systems integration, and problem-solving through software."
               }
             </motion.p>

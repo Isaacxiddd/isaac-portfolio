@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { Lang } from "../types";
 import TranslationManager from "../lib/TranslationManager";
 
@@ -17,9 +17,7 @@ export default function useTranslations() {
     setCurrentLang(newLang);
   }, [translationManager]);
 
-  const translations = useMemo(() => {
-    return translationManager.getTranslations();
-  }, [translationManager, currentLang]);
+  const translations = translationManager.getTranslations();
 
   return {
     lang: currentLang,

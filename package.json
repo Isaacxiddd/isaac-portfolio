@@ -8,6 +8,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "fetch:logos": "node ./scripts/fetch-logos.mjs",
     "perf": "node ./scripts/perf.mjs",
     "perf:local": "node ./scripts/perf.mjs --local"
@@ -24,16 +28,26 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.20",
     "chrome-launcher": "^1.2.1",
+    "eslint": "^10.4.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "jsdom": "^29.1.1",
     "lighthouse": "^13.3.0",
     "postcss": "^8.4.41",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.5.4",
-    "vite": "^5.4.1"
+    "typescript-eslint": "^8.60.1",
+    "vite": "^6.4.3",
+    "vitest": "^4.1.8"
   }
 }

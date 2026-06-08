@@ -7,13 +7,13 @@ export default function Starfield() {
     const ctx = canvas.getContext("2d")!;
     let w = canvas.width = window.innerWidth * devicePixelRatio;
     let h = canvas.height = window.innerHeight * devicePixelRatio;
-    let stars = Array.from({length: 120}, ()=>({
+    const stars = Array.from({length: 120}, ()=>({
       x: Math.random()*w, y: Math.random()*h, z: Math.random()*1.5 + 0.2
     }));
     let raf = 0;
     function loop(){
       ctx.clearRect(0,0,w,h);
-      for (let s of stars){
+      for (const s of stars){
         const x = s.x, y = s.y, r = s.z;
         ctx.fillStyle = `rgba(14,165,255,${0.03 + r*0.3})`;
         ctx.fillRect(x, y, r*1.6, r*1.6);

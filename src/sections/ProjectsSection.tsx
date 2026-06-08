@@ -52,9 +52,14 @@ const ProjectsSection = React.memo(({ translations, lang, projectRepo }: {
                 </div>
               </div>
 
-              <div className="relative h-48 overflow-hidden flex-shrink-0">
+              <div className="relative h-48 overflow-hidden flex-shrink-0 cursor-pointer" onClick={() => openProjectDetails(project)}>
                 <RotatingImage project={project} alt={`Preview de ${project.getName(lang)}`} paused={hoveredIndex === index} />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                  <span className="text-white/0 group-hover:text-white/80 text-sm font-medium transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    {lang === "es" ? "Ver detalles" : "View details"}
+                  </span>
+                </div>
               </div>
 
               <div className="p-6 flex flex-col flex-1">
@@ -78,43 +83,46 @@ const ProjectsSection = React.memo(({ translations, lang, projectRepo }: {
                   </div>
                 </div>
 
-                <div className="flex gap-3 mt-auto">
-                  <button
+                <div className="flex items-center gap-2 mt-auto pt-4 border-t border-white/10">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => openProjectDetails(project)}
-                    className="flex-1 bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm py-3 px-4 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-105 font-medium"
+                    className="flex-1 bg-white text-gray-900 text-sm py-2.5 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-bold flex items-center justify-center gap-2"
                   >
-                    {lang === "es" ? "Ver más" : "View more"}
-                  </button>
-                  <div className="flex flex-col gap-2">
-                    <a
+                    {lang === "es" ? "Detalles" : "Details"}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                  </motion.button>
+
+                  <div className="flex gap-2">
+                    <motion.a
+                      whileHover={{ y: -3 }}
+                      whileTap={{ scale: 0.9 }}
                       href={project.url}
                       target="_blank"
                       rel="noreferrer"
-                      className={`text-sm py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 text-center font-medium flex items-center justify-center gap-1.5 ${
-                        project.url.includes("github.com")
-                          ? "bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30"
-                          : "bg-white text-teal-700 hover:bg-gray-100"
-                      }`}
+                      title={project.url.includes("github.com") ? "GitHub" : translations.openProject}
+                      className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
                     >
-                      {project.url.includes("github.com") && (
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                          <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
-                        </svg>
+                      {project.url.includes("github.com") ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" /></svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
                       )}
-                      {project.url.includes("github.com") ? "GitHub" : translations.openProject}
-                    </a>
+                    </motion.a>
+
                     {project.githubUrl && (
-                      <a
+                      <motion.a
+                        whileHover={{ y: -3 }}
+                        whileTap={{ scale: 0.9 }}
                         href={project.githubUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm py-2 px-4 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-105 text-center font-medium flex items-center justify-center gap-1.5"
+                        title="GitHub Source"
+                        className="w-10 h-10 rounded-xl bg-gray-800/80 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-gray-700 transition-colors"
                       >
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                          <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" />
-                        </svg>
-                        GitHub
-                      </a>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.01c-3.34.73-4.04-1.61-4.04-1.61-.55-1.41-1.34-1.79-1.34-1.79-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.29 1.23a11.44 11.44 0 0 1 6 0C16.1 5.3 17.1 5.62 17.1 5.62c.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.23v3.3c0 .32.21.69.82.58A12 12 0 0 0 12 .5z" /></svg>
+                      </motion.a>
                     )}
                   </div>
                 </div>

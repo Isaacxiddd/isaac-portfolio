@@ -2,7 +2,7 @@
 /**
  * Performance audit script using Lighthouse.
  * Usage:
- *   pnpm perf              → audit production (https://isaacportafolio.vercel.app)
+ *   pnpm perf              → audit production (https://fullstackisaac.vercel.app)
  *   pnpm perf --local      → audit local dev/preview server (http://localhost:4173)
  *   pnpm perf --url <url>  → audit any custom URL
  */
@@ -17,7 +17,7 @@ const ROOT = resolve(__dirname, '..');
 const REPORTS_DIR = resolve(ROOT, 'lighthouse-reports');
 
 // ─── Config ───────────────────────────────────────────────────────────────────
-const PROD_URL = 'https://isaacportafolio.vercel.app';
+const PROD_URL = 'https://fullstackisaac.vercel.app';
 const LOCAL_URL = 'http://localhost:4173';
 
 const THRESHOLDS = {

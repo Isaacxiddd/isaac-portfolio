@@ -245,6 +245,88 @@ Ready.
     }
   },
   {
+    name: 'boca',
+    description: { es: 'Activa el modo Boca Juniors ⚽', en: 'Activate Boca Juniors mode ⚽' },
+    category: 'fun',
+    response: {
+      es: '🔵💛 ¡MODO BOCA ACTIVADO! 💛🔵',
+      en: '🔵💛 BOCA MODE ACTIVATED! 💛🔵'
+    }
+  },
+  {
+    name: 'tree',
+    description: { es: 'Muestra la arquitectura del proyecto', en: 'Show project architecture' },
+    category: 'system',
+    response: {
+      es: `src/
+├── components/        # UI reutilizable
+│   ├── ContentRenderer.tsx
+│   ├── ImageGallery.tsx
+│   ├── Modal.tsx
+│   ├── RotatingImage.tsx
+│   ├── Sidebar.tsx
+│   ├── TerminalConsole.tsx
+│   └── ...
+├── config/            # Configuración y comandos
+│   ├── AppConfig.ts
+│   └── commands.ts
+├── hooks/             # Custom hooks
+│   ├── useTerminal.ts
+│   ├── useNavigation.ts
+│   ├── useToast.tsx
+│   └── ...
+├── models/            # Clases del dominio
+│   ├── Project.ts
+│   └── Technology.ts
+├── repositories/      # Data layer
+│   ├── ProjectRepository.ts
+│   └── TechnologyRepository.ts
+├── sections/          # Secciones del portfolio
+│   ├── AboutSection.tsx
+│   ├── ProjectsSection.tsx
+│   ├── TechnologiesSection.tsx
+│   └── ...
+├── types/             # TypeScript types
+├── lib/               # Utilidades
+├── App.tsx            # Componente principal
+├── main.tsx           # Entry point
+└── styles.css         # Estilos globales + terminal`,
+      en: `src/
+├── components/        # Reusable UI
+│   ├── ContentRenderer.tsx
+│   ├── ImageGallery.tsx
+│   ├── Modal.tsx
+│   ├── RotatingImage.tsx
+│   ├── Sidebar.tsx
+│   ├── TerminalConsole.tsx
+│   └── ...
+├── config/            # Configuration & commands
+│   ├── AppConfig.ts
+│   └── commands.ts
+├── hooks/             # Custom hooks
+│   ├── useTerminal.ts
+│   ├── useNavigation.ts
+│   ├── useToast.tsx
+│   └── ...
+├── models/            # Domain classes
+│   ├── Project.ts
+│   └── Technology.ts
+├── repositories/      # Data layer
+│   ├── ProjectRepository.ts
+│   └── TechnologyRepository.ts
+├── sections/          # Portfolio sections
+│   ├── AboutSection.tsx
+│   ├── ProjectsSection.tsx
+│   ├── TechnologiesSection.tsx
+│   └── ...
+├── types/             # TypeScript types
+├── lib/               # Utilities
+├── App.tsx            # Main component
+├── main.tsx           # Entry point
+└── styles.css         # Global styles + terminal`
+    }
+  },
+  {
     name: 'achievement',
     description: { es: 'Logro desbloqueado', en: 'Achievement unlocked' },
     category: 'fun',

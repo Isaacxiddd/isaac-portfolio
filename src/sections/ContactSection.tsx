@@ -9,8 +9,7 @@ import { fadeUp } from "../lib/animations";
 const ContactSection: React.FC<{
   translations: Translations;
   lang: Lang;
-  onCopyEmail: () => void;
-}> = ({ translations, lang, onCopyEmail }) => {
+}> = ({ translations, lang }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 

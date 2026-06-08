@@ -23,8 +23,7 @@ const ContentRenderer: React.FC<{
   projectRepo: ProjectRepository;
   techRepo: TechnologyRepository;
   onSetActive: (index: number) => void;
-  onCopyEmail: () => void;
-}> = ({ activeIndex, translations, lang, theme, projectRepo, techRepo, onSetActive, onCopyEmail }) => {
+}> = ({ activeIndex, translations, lang, theme, projectRepo, techRepo, onSetActive }) => {
   const section = () => {
     switch (activeIndex) {
       case 0:
@@ -34,7 +33,7 @@ const ContentRenderer: React.FC<{
       case 2:
         return <TechnologiesSection translations={translations} lang={lang} techRepo={techRepo} />;
       case 3:
-        return <ContactSection translations={translations} lang={lang} onCopyEmail={onCopyEmail} />;
+        return <ContactSection translations={translations} lang={lang} />;
       case 4:
         return <LearnMoreSection translations={translations} lang={lang} />;
       default:

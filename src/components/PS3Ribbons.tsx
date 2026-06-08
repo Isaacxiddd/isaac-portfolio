@@ -43,7 +43,7 @@ const PS3Ribbons: React.FC<{ theme: Theme }> = ({ theme }) => {
         const freq = (2 * Math.PI) / r.wavelength;
         for (let x = 0; x <= canvas.width + 6; x += 4) {
           const y = r.baseY + Math.sin(x * freq + t * r.speed + r.phase) * r.amplitude;
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
         ctx.stroke();
       }

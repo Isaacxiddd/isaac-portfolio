@@ -17,6 +17,7 @@ import Sidebar from "./components/Sidebar";
 import ContentRenderer from "./components/ContentRenderer";
 import Footer from "./components/Footer";
 import TerminalConsole from "./components/TerminalConsole";
+import { useBocaAudio } from "./hooks/useBocaAudio";
 
 // ========================= COMPONENTE PRINCIPAL =========================
 
@@ -35,6 +36,8 @@ export default function OptimizedPortfolio(): JSX.Element {
   const [terminalOpen, setTerminalOpen] = useState(false);
   const toggleTerminal = useCallback(() => setTerminalOpen(v => !v), []);
   const closeTerminal = useCallback(() => setTerminalOpen(false), []);
+
+  const { isActive: isBocaActive, isPlaying: isBocaPlaying, toggle: toggleBoca, pause: bocaPause, stop: bocaStop } = useBocaAudio();
 
   const openUrl = useCallback((url: string) => window.open(url, '_blank', 'noopener'), []);
 
@@ -259,7 +262,6 @@ export default function OptimizedPortfolio(): JSX.Element {
                 projectRepo={projectRepo}
                 techRepo={techRepo}
                 onSetActive={setActive}
-                onCopyEmail={copyEmail}
               />
             </motion.section>
           </AnimatePresence>
@@ -278,6 +280,11 @@ export default function OptimizedPortfolio(): JSX.Element {
           onClose={closeTerminal}
           onOpenUrl={openUrl}
           onDownloadCV={downloadCV}
+          onBocaToggle={toggleBoca}
+          isBocaActive={isBocaActive}
+          isBocaPlaying={isBocaPlaying}
+          onBocaPause={bocaPause}
+          onBocaStop={bocaStop}
         />
       )}
 

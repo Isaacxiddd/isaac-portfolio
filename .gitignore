@@ -45,6 +45,7 @@ Desktop.ini
 *.swp
 *~
 
-# Opcionales (descomentar si aplica)
+# Lighthouse reports
+lighthouse-reports/
 # screenshots/
 # .turbo/

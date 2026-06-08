@@ -14,16 +14,20 @@ interface Props {
   onClose: () => void;
   onOpenUrl: (url: string) => void;
   onDownloadCV: () => void;
+  onBocaToggle?: () => void;
+  isBocaActive?: boolean;
+  isBocaPlaying?: boolean;
+  onBocaPause?: () => void;
+  onBocaStop?: () => void;
 }
 
-const TerminalConsole: React.FC<Props> = ({ lang, translations, projectRepo, techRepo, theme, onClose, onOpenUrl, onDownloadCV }) => {
+const TerminalConsole: React.FC<Props> = ({ lang, translations, projectRepo, techRepo, theme, onClose, onOpenUrl, onDownloadCV, onBocaToggle, isBocaActive, isBocaPlaying, onBocaPause, onBocaStop }) => {
   const {
     entries,
     inputValue,
     setInputValue,
     handleKeyDown,
-    submitCommand,
-  } = useTerminal({ lang, translations, projectRepo, techRepo, theme, onClose, onOpenUrl, onDownloadCV });
+  } = useTerminal({ lang, translations, projectRepo, techRepo, theme, onClose, onOpenUrl, onDownloadCV, onBocaToggle });
 
   const bodyRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -66,6 +70,42 @@ const TerminalConsole: React.FC<Props> = ({ lang, translations, projectRepo, tec
           </button>
         </div>
 
+        {isBocaActive && (
+          <div className="terminal-boca-bar">
+            <svg className="terminal-boca-shield" viewBox="0 0 100 120" width="18" height="22" aria-hidden>
+              <path d="M50 5 L90 25 L90 55 C90 80 70 105 50 115 C30 105 10 80 10 55 L10 25 Z" fill="#ffd700" stroke="#003da5" strokeWidth="3"/>
+              <path d="M30 35 L70 35 L70 45 L55 45 L55 85 L45 85 L45 45 L30 45 Z" fill="#003da5"/>
+            </svg>
+            <span className="terminal-boca-label">BOCA</span>
+            <button
+              className="terminal-boca-btn"
+              onClick={onBocaPause}
+              aria-label={isBocaPlaying ? "Pause" : "Play"}
+              title={isBocaPlaying ? "Pause" : "Play"}
+            >
+              {isBocaPlaying ? (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <rect x="6" y="4" width="4" height="16" rx="1"/>
+                  <rect x="14" y="4" width="4" height="16" rx="1"/>
+                </svg>
+              ) : (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <polygon points="6,3 20,12 6,21"/>
+                </svg>
+              )}
+            </button>
+            <button
+              className="terminal-boca-btn"
+              onClick={onBocaStop}
+              aria-label="Stop"
+              title="Stop"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <rect x="4" y="4" width="16" height="16" rx="2"/>
+              </svg>
+            </button>
+          </div>
+        )}
         <div ref={bodyRef} className="terminal-body">
           {entries.map((entry) => (
             <div key={entry.id} className="terminal-entry">
@@ -87,6 +127,7 @@ const TerminalConsole: React.FC<Props> = ({ lang, translations, projectRepo, tec
             </div>
           ))}
         </div>
+
 
         <div className="terminal-input-area">
           <span className="terminal-prompt">{prompt}</span>

@@ -20,10 +20,10 @@ class TranslationManager {
       mastered: "Manejo",
       learning: "Aprendiendo",
       tools: "Herramientas",
-      bio: "Soy Isaac José García Márquez, un desarrollador apasionado por la tecnología y la programación. Me especializo en desarrollo web y análisis de datos, siempre buscando aprender nuevas tecnologías y mejorar mis habilidades.",
+      bio: "Soy Isaac José García Márquez, un desarrollador apasionado por la tecnología y la programación. Construyo aplicaciones web y soluciones de automatización con enfoque full stack, integración de sistemas y resolución de problemas mediante software.",
       emailCopied: "Email copiado",
       copyManual: "Copia manual",
-      developer: "Desarrollador Backend y Automatización de Sistemas",
+      developer: "Desarrollador Web Fullstack",
       nanana: "¡Ver mis Proyectos!",
       formName: "Nombre",
       formEmail: "Email",
@@ -51,10 +51,10 @@ class TranslationManager {
       mastered: "Mastered",
       learning: "Learning",
       tools: "Tools",
-      bio: "I'm Isaac José García Márquez, a developer passionate about technology and programming. I specialize in web development and data analysis, always looking to learn new technologies and improve my skills.",
+      bio: "I'm Isaac José García Márquez, a developer passionate about technology and programming. I build web applications and automation solutions with a full stack approach, systems integration, and problem-solving through software.",
       emailCopied: "Email copied",
       copyManual: "Copy manually",
-      developer: "Backend Developer & Systems Automation",
+      developer: "Systems Engineering Student",
       nanana: "¡Check out my Projects!",
       formName: "Name",
       formEmail: "Email",
@@ -74,6 +74,10 @@ class TranslationManager {
       TranslationManager.instance = new TranslationManager();
     }
     return TranslationManager.instance;
+  }
+
+  static reset(): void {
+    TranslationManager.instance = undefined as unknown as TranslationManager;
   }
 
   getCurrentLang(): Lang {

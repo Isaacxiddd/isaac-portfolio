@@ -47,7 +47,7 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
         <motion.div variants={fadeUp} className="p-5 border border-cyberaccent/30 bg-black/30 backdrop-blur-sm rounded-xl">
           <p className="text-sm text-gray-300 leading-relaxed">
             {lang === "es"
-              ? "Estudiante de Ingeniería en Sistemas en UTN. Desarrollo aplicaciones web, automatizaciones e integraciones de APIs utilizando Python y JavaScript. Mis proyectos han sido utilizados por más de 3.000 usuarios. Actualmente profundizando en React, TypeScript y desarrollo full stack."
+              ? "Desarrollador Web Fullstack. Desarrollo aplicaciones web, automatizaciones e integraciones de APIs utilizando Python y JavaScript. Mis proyectos han sido utilizados por más de 3.000 usuarios. Actualmente profundizando en React, TypeScript y desarrollo full stack."
               : "Systems Engineering student at UTN. I build web applications, automations and API integrations using Python and JavaScript. My projects have been used by more than 3,000 users. Currently deepening my knowledge in React, TypeScript and full stack development."}
           </p>
         </motion.div>
