@@ -1,14 +1,18 @@
 import { TechDetail } from "../types";
 
 export default class Technology {
+  public detail?: TechDetail;
+
   constructor(
     public readonly name: string,
     public readonly logo: string,
     public readonly status: 'mastered' | 'learning' | 'tool',
     public readonly hasDetail: boolean = false,
-    public readonly detail?: TechDetail,
+    detail?: TechDetail,
     public readonly tooltip?: { es: string; en: string }
-  ) {}
+  ) {
+    this.detail = detail;
+  }
 
   isDetailed(): boolean {
     return this.hasDetail && !!this.detail;

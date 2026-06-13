@@ -31,7 +31,7 @@ const LearnMoreSection: React.FC<{ translations: Translations; lang: Lang }> = (
         });
 
     loadStats('/api/neocities-info').catch(() => {
-      loadStats('/neocities-fallback.json');
+      loadStats('/neocities-fallback.json').catch(() => {});
     });
   }, []);
 
